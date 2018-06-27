@@ -28,6 +28,7 @@ Current tasks:
 
 - [x] Get Started
 - [x] Set up repos, git flow, deployments, etc.
+- [ ] Add in integrated testing
 
 - [ ] Build in full logic
 - [ ] Build out the Feature Models
