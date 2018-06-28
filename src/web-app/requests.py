@@ -8,9 +8,7 @@ from flask import redirect
 from flask_sqlalchemy import SQLAlchemy
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
-src_dir = os.path.dirname(project_dir)
-database_file = "sqlite:///{}".format(os.path.join(src_dir, "feature_request.db"))
-
+database_file = "sqlite:///{}".format(os.path.join(project_dir, "feature_request.db"))
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 
@@ -21,16 +19,6 @@ class Feature(db.Model):
 
     def __repr__(self):
         return "<Title: {}>".format(self.title)
-
-
-@app.route("/", methods=["GET", "POST"])
-def home():
-    if request.form:
-        feature_title = Feature(title=request.form.get("title"))
-        db.session.add(feature_title)
-        db.session.commit()
-    features = Feature.query.all()
-    return render_template("home.html", features=features)
 
 @app.route("/update", methods=["POST"])
 def update():
@@ -49,5 +37,3 @@ def delete():
     db.session.commit()
     return redirect("/")
   
-if __name__ == "__main__":
-    app.run(debug=True)

@@ -10,17 +10,18 @@ In order to get this up and runnin' locally, please make sure that you have the 
 
 Make a new database:
 
-Open python3 in the web-app directory, and run the following:
-
-* >>> from runserver import db
-
-* >>> db.create_all()
-
-* >>> exit()
+Open python3 in the web-app directory, and run create_db.py
 
 Run the webserver:
 
 * python3 runserver.py
+
+Required modules:
+* flask 
+* sqlalchemy 
+* flask-sqlalchemy
+* flask-jsonpify 
+* flask-restful
 
 Enjoy! :)
 
@@ -28,7 +29,7 @@ Current tasks:
 
 - [x] Get Started
 - [x] Set up repos, git flow, deployments, etc.
-- [ ] Add in integrated testing
+- [ ] Add in testing suites
 
 - [ ] Build in full logic
 - [ ] Build out the Feature Models
