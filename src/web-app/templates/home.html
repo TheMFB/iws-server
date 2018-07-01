@@ -1,33 +1,152 @@
-<html>
-    <body>
-    	<h1>Add feature</h1>
-		<form method="POST" action="/">
-			<input type="text" name="title">
-			<input type="submit" value="Add">
-		</form>
+{% extends 'bootstrap/base.html' %}
+{% block body %}
+{{ super() }}
+<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
+<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script> -->
+<!-- <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
 
-	    <h1>Features</h1>
-	    <table>
-	        {% for feature in features %}
-		        <tr>
-		            <td>
-		            	{{feature.title}}
-		            </td>
-		            <td>
-			            <form method="POST" action="./update" style="display: inline">
-				        	<input type="hidden" value="{{feature.title}}" name="oldtitle">
-				        	<input type="text" value="{{feature.title}}" name="newtitle">
-				        	<input type="submit" value="Update">
-			            </form>
-		            </td>
-		            <td>
-			            <form method="POST" action="./delete" style="display: inline">
-			               <input type="hidden" value="{{feature.title}}" name="title">
-			               <input type="submit" value="Delete">
-			            </form>
-		            </td>
-		        </tr>
-	        {% endfor %}
-	    </table>
-    </body>
-</html>
+<div class="container">
+	    <div class="row">
+	        <div class="col-sm-10 col-sm-offset-1">
+	            <h1>Flask-Admin example</h1>
+				<table class="table table-striped">
+				  <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">First</th>
+				      <th scope="col">Last</th>
+				      <th scope="col">Handle</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">1</th>
+				      <td>Mark</td>
+				      <td>Otto</td>
+				      <td>@mdo</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">2</th>
+				      <td>Jacob</td>
+				      <td>Thornton</td>
+				      <td>@fat</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">3</th>
+				      <td>Larry</td>
+				      <td>the Bird</td>
+				      <td>@twitter</td>
+				    </tr>
+				  </tbody>
+				</table>
+				<table class="table table-striped">
+	    <tr><td style="width: 1px;"></td><td><b>Task</b></td><td><b>Options</b></td></tr>
+	    <tr>
+	        <td>
+	            <span class="label label-success">Done</span>
+	        </td>
+	        <td><p><b>Task title</b></p><p>Task description</p></td>
+	        <td>
+	            <button class="btn">Edit</button>
+	            <button class="btn">Delete</button>
+	            <span><button class="btn">Mark In Progress</button></span>
+	        </td>
+	    </tr>
+	    <tr>
+	        <td>
+	            <span class="label label-important">In Progress</span>
+	        </td>
+	        <td><p><b>Task title</b></p><p>Task description</p></td>
+	        <td>
+	            <button class="btn">Edit</button>
+	            <button class="btn">Delete</button>
+	            <span><button class="btn">Mark Done</button></span>
+	        </td>
+	    </tr>
+
+
+	</table>
+
+	<table class="table table-striped">
+    <tr><td style="width: 1px;"></td><td><b>Task</b></td><td><b>Options</b></td></tr>
+    <!-- ko foreach: tasks -->
+    <tr>
+        <td>
+            <span data-bind="visible: done" class="label label-success">Done</span>
+            <span data-bind="visible: !done()" class="label label-important">In Progress</span>
+        </td>
+        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"></p></td>
+        <td>
+            <button data-bind="click: $parent.beginEdit" class="btn">Edit</button>
+            <button data-bind="click: $parent.remove" class="btn">Delete</button>
+            <span data-bind="visible: done">
+                <button data-bind="click: $parent.markInProgress" class="btn">Mark In Progress</button>
+            </span>
+            <span data-bind="visible: !done()">
+                <button data-bind="click: $parent.markDone" class="btn">Mark Done</button>
+            </span>
+        </td>
+    </tr>
+    <!-- /ko -->
+</table>
+<button data-bind="click: beginAdd" class="btn">Add Task</button>
+</div>
+
+<script type="text/javascript">
+	function TasksViewModel() {
+	        var self = this;
+	        self.tasksURI = 'http://localhost:5000/todo/api/v1.0/tasks';
+	        self.username = "miguel";
+	        self.password = "python";
+	        self.tasks = ko.observableArray();
+
+	        self.ajax = function(uri, method, data) {
+	            var request = {
+	                url: uri,
+	                type: method,
+	                contentType: "application/json",
+	                accepts: "application/json",
+	                cache: false,
+	                dataType: 'json',
+	                data: JSON.stringify(data),
+	                beforeSend: function (xhr) {
+	                    xhr.setRequestHeader("Authorization", 
+	                        "Basic " + btoa(self.username + ":" + self.password));
+	                },
+	                error: function(jqXHR) {
+	                    console.log("ajax error " + jqXHR.status);
+	                }
+	            };
+	            return $.ajax(request);
+	        }
+
+	        self.beginAdd = function() {
+	            alert("Add");
+	        }
+	        self.beginEdit = function(task) {
+	            alert("Edit: " + task.title());
+	        }
+	        self.remove = function(task) {
+	            alert("Remove: " + task.title());
+	        }
+	        self.markInProgress = function(task) {
+	            task.done(false);
+	        }
+	        self.markDone = function(task) {
+	            task.done(true);
+	        }
+
+	        self.ajax(self.tasksURI, 'GET').done(function(data) {
+	            for (var i = 0; i < data.tasks.length; i++) {
+	                self.tasks.push({
+	                    uri: ko.observable(data.tasks[i].uri),
+	                    title: ko.observable(data.tasks[i].title),
+	                    description: ko.observable(data.tasks[i].description),
+	                    done: ko.observable(data.tasks[i].done)
+	                });
+	            }
+	        });
+	    }
+	    ko.applyBindings(new TasksViewModel(), $('#main')[0]);
+</script>
+{% endblock body %}
