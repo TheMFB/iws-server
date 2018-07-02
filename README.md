@@ -25,9 +25,12 @@ Make a new database:
 
 Open python3 in the web-app directory, and run create_db.py
 
+Run the api:
+* python3 run_api
+
 Run the webserver:
 
-* python3 runserver.py
+* python3 run_webapp.py
 
 Required modules:
 * flask 

@@ -3,102 +3,126 @@
 {{ super() }}
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
 <!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script> -->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!-- <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
+<style>
+  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+  #sortable li span { position: absolute; margin-left: -1.3em; }
+</style>
 
 <div class="container">
-	    <div class="row">
-	        <div class="col-sm-10 col-sm-offset-1">
-	            <h1>Flask-Admin example</h1>
-				<table class="table table-striped">
-				  <thead>
-				    <tr>
-				      <th scope="col">#</th>
-				      <th scope="col">First</th>
-				      <th scope="col">Last</th>
-				      <th scope="col">Handle</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>Mark</td>
-				      <td>Otto</td>
-				      <td>@mdo</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">2</th>
-				      <td>Jacob</td>
-				      <td>Thornton</td>
-				      <td>@fat</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">3</th>
-				      <td>Larry</td>
-				      <td>the Bird</td>
-				      <td>@twitter</td>
-				    </tr>
-				  </tbody>
-				</table>
-				<table class="table table-striped">
-	    <tr><td style="width: 1px;"></td><td><b>Task</b></td><td><b>Options</b></td></tr>
-	    <tr>
-	        <td>
-	            <span class="label label-success">Done</span>
-	        </td>
-	        <td><p><b>Task title</b></p><p>Task description</p></td>
-	        <td>
-	            <button class="btn">Edit</button>
-	            <button class="btn">Delete</button>
-	            <span><button class="btn">Mark In Progress</button></span>
-	        </td>
-	    </tr>
-	    <tr>
-	        <td>
-	            <span class="label label-important">In Progress</span>
-	        </td>
-	        <td><p><b>Task title</b></p><p>Task description</p></td>
-	        <td>
-	            <button class="btn">Edit</button>
-	            <button class="btn">Delete</button>
-	            <span><button class="btn">Mark Done</button></span>
-	        </td>
-	    </tr>
+    <div class="row" >
+        <div class="col-sm-10 col-sm-offset-1">
+            <h1>Flask-Admin example</h1>
+			<table class="table table-striped" id="sortable">
+			    <tr >
+			    	<td style="width: 1px;"><b>Priority</b></td>
+			    	<td><b>Proposed Feature</b></td>
+			    	<td><b>Target Date</b></td>
+			    	<td><b>Client</b></td>
+			    	<td><b>Area</b></td>
+			    	<td><b>Options</b></td>
+			    </tr>
+			    <tr class="ui-state-default">
+			        <td>
+			        	<b>1</b>
 
-
-	</table>
-
-	<table class="table table-striped">
-    <tr><td style="width: 1px;"></td><td><b>Task</b></td><td><b>Options</b></td></tr>
-    <!-- ko foreach: tasks -->
-    <tr>
-        <td>
-            <span data-bind="visible: done" class="label label-success">Done</span>
-            <span data-bind="visible: !done()" class="label label-important">In Progress</span>
-        </td>
-        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"></p></td>
-        <td>
-            <button data-bind="click: $parent.beginEdit" class="btn">Edit</button>
-            <button data-bind="click: $parent.remove" class="btn">Delete</button>
-            <span data-bind="visible: done">
-                <button data-bind="click: $parent.markInProgress" class="btn">Mark In Progress</button>
-            </span>
-            <span data-bind="visible: !done()">
-                <button data-bind="click: $parent.markDone" class="btn">Mark Done</button>
-            </span>
-        </td>
-    </tr>
-    <!-- /ko -->
-</table>
-<button data-bind="click: beginAdd" class="btn">Add Task</button>
+			        </td>
+			        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
+			        <td>
+			        	11/27/1920
+			        </td>
+			        <td>
+			        	A Smart Client
+			        </td>
+			        <td>
+			        	Billing
+			        </td>
+			        <td>
+			            <button class="btn">Edit</button>
+			            <button class="btn">Delete</button>
+			            <!-- <span><button class="btn">Mark In Progress</button></span> -->
+			        </td>
+			    </tr>
+			    <tr class="ui-state-default">
+			        <td>
+			        	<b>2</b>
+			        </td>
+			        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
+			        <td>
+			        	11/27/1920
+			        </td>
+			        <td>
+			        	A Pain in the Ass Client
+			        </td>	        
+			        <td>
+			        	Billing
+			        </td>
+			        <td>
+			            <button class="btn">Edit</button>
+			            <button class="btn">Delete</button>
+			            <!-- <span><button class="btn">Mark In Progress</button></span> -->
+			        </td>
+			    </tr>
+			</table>
+			<table class="table table-striped">
+				<tr><td style="width: 1px;"></td><td><b>Task</b></td><td><b>Options</b></td></tr>
+			    <!-- ko foreach: features -->
+			    <tr>
+			        <td>
+			            <span data-bind="visible: done" class="label label-success">Done</span>
+			            <span data-bind="visible: !done()" class="label label-important">In Progress</span>
+			        </td>
+			        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"></p></td>
+			        <td>
+			            <button data-bind="click: $parent.beginEdit" class="btn">Edit</button>
+			            <button data-bind="click: $parent.remove" class="btn">Delete</button>
+			            <span data-bind="visible: done">
+			                <button data-bind="click: $parent.markInProgress" class="btn">Mark In Progress</button>
+			            </span>
+			            <span data-bind="visible: !done()">
+			                <button data-bind="click: $parent.markDone" class="btn">Mark Done</button>
+			            </span>
+			        </td>
+			    </tr>
+			    <!-- /ko -->
+			</table>
+			<button data-bind="click: beginAdd" class="btn">Add Task</button>
+			<button data-bind="click: beginAdd" class="btn">Commit</button>
+		</div>
+	</div>
 </div>
 
+<script>
+	var fixHelperModified = function(e, tr) {
+	    var $originals = tr.children();
+	    var $helper = tr.clone();
+	    $helper.children().each(function(index) {
+	        $(this).width($originals.eq(index).width())
+	    });
+	    return $helper;
+	},
+	    updateIndex = function(e, ui) {
+	        $('td.index', ui.item.parent()).each(function (i) {
+	            $(this).html(i + 1);
+	        });
+	    };
+
+	$("#sortable tbody").sortable({
+	    helper: fixHelperModified,
+	    stop: updateIndex
+	}).disableSelection();
+</script>
 <script type="text/javascript">
 	function TasksViewModel() {
 	        var self = this;
-	        self.tasksURI = 'http://localhost:5000/todo/api/v1.0/tasks';
-	        self.username = "miguel";
-	        self.password = "python";
-	        self.tasks = ko.observableArray();
+	        self.featuresURI = 'http://localhost:5000/api/features';
+	        // self.username = "miguel";
+	        // self.password = "python";
+	        self.features = ko.observableArray();
 
 	        self.ajax = function(uri, method, data) {
 	            var request = {
@@ -123,26 +147,27 @@
 	        self.beginAdd = function() {
 	            alert("Add");
 	        }
-	        self.beginEdit = function(task) {
-	            alert("Edit: " + task.title());
+	        self.beginEdit = function(feature) {
+	            alert("Edit: " + feature.title());
 	        }
-	        self.remove = function(task) {
-	            alert("Remove: " + task.title());
+	        self.remove = function(feature) {
+	            alert("Remove: " + feature.title());
 	        }
-	        self.markInProgress = function(task) {
-	            task.done(false);
+	        self.markInProgress = function(feature) {
+	            feature.done(false);
 	        }
-	        self.markDone = function(task) {
-	            task.done(true);
+	        self.markDone = function(feature) {
+	            feature.done(true);
 	        }
 
-	        self.ajax(self.tasksURI, 'GET').done(function(data) {
-	            for (var i = 0; i < data.tasks.length; i++) {
-	                self.tasks.push({
-	                    uri: ko.observable(data.tasks[i].uri),
-	                    title: ko.observable(data.tasks[i].title),
-	                    description: ko.observable(data.tasks[i].description),
-	                    done: ko.observable(data.tasks[i].done)
+	        self.ajax(self.featuresURI, 'GET').done(function(data) {
+	            for (var i = 0; i < data.features.length; i++) {
+	                self.features.push({
+	                    title: ko.observable(data.features[i].title),
+	                    description: ko.observable(data.features[i].description),
+	                    id: ko.observable(data.features[i].id)
+	                    client: ko.observable(data.features[i].client)
+	                    product_area: ko.observable(data.features[i].product_area)
 	                });
 	            }
 	        });
