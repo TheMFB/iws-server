@@ -67,7 +67,28 @@ Current tasks:
 - [x] Configure AWS
 - [ ] Host on AWS, set up automated deployments
 
+
+
+
+# Cheatsheet:
+
 On model change:
 flask db init
 flask db migrate
 flask db upgrade
+
+>>> from app import db
+>>> from app.models import Feature
+
+
+db.session.add(Feature(...))
+db.session.commit()
+
+>>> f = Feature(title="t2", description="d2", client="c2", client_priority="2", target_date=datetime.datetime(2222, 2, 2), product_area="p2")
+
+f = {"id"=5, title":"t3", "description":"d3", "client":"c3", "product_area":"p3"}
+
+f = {id = 1, title = "t1", description = "d1", client = "c1", product_area = p1"}
+g = {id = 2, title = "t2", description = "d2", client = "c2", product_area = p2"}
+
+h = {id = 3, title = "t3", description = "d3", client = "c3", product_area = p3"}
