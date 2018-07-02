@@ -88,7 +88,8 @@ db.session.commit()
 
 f = {"id"=5, title":"t3", "description":"d3", "client":"c3", "product_area":"p3"}
 
-f = {id = 1, title = "t1", description = "d1", client = "c1", product_area = p1"}
-g = {id = 2, title = "t2", description = "d2", client = "c2", product_area = p2"}
 
-h = {id = 3, title = "t3", description = "d3", client = "c3", product_area = p3"}
+f = Feature(id="1", title="t1", description="d1", client="c1", product_area="p1")
+g = Feature(id = 2, title = "t2", description = "d2", client = "c2", product_area = "p2")
+
+h = Feature(id = 3, title = "t3", description = "d3", client = "c3", product_area = "p3")
