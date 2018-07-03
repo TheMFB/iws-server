@@ -8,7 +8,7 @@ class Feature(db.Model):
     description = db.Column(db.String(120))
     client = db.Column(db.String(64))
     # client_priority = db.Column(db.Integer())
-    # target_date = db.Column(db.DateTime())
+    # target_date = db.Column(db.DateTime)
     product_area = db.Column(db.String(64))
 
     def __repr__(self):

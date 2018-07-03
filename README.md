@@ -32,6 +32,11 @@ Run the webserver:
 
 * python3 run_webapp.py
 
+Note that Chrome does not support localhost CORS requests. Use Firefox, set --disable-web-security flag when opening Chrome, or install the "Allow-Control-Allow-Origin: * Chrome Extension": https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
+or similar CORS extension.
+
+
+
 Required modules:
 * flask 
 * sqlalchemy 
@@ -70,6 +75,24 @@ Current tasks:
 - [x] Configure AWS
 - [ ] Host on AWS, set up automated deployments
 
+__________________________________________________
+
+		# TODO: Add a random string module(shortid.generate - as type in the models) (Also, pull all of these into a blueprints/routes file, no class)
+		# All decorated mehods into a controllers folder, features.py
+		# models folder, and put Feature file into it.
+		# controller will import the models it needs. (Kind of like Oshen)
+		# db.py for db_connect.connect(). only do this once. 
+		# class should be Feature and into models. feature.py
+		# everythin app.route needs to be moved. always plural the addresses.
+		# db.py should be connected there. select, create statements can go there.
+		# run puts on everything that's changed (or all of it, based on jquery) - to put (or update) request which can change just the parts that have changed. Do it every time.
+			 # Save this for last, mockup if we need. put_many/update_many.
+		# first pull the models and controller.
+
+		# 
+
+
+__________________________________________________
 
 
 
@@ -96,3 +119,6 @@ f = Feature(id="1", title="t1", description="d1", client="c1", product_area="p1"
 g = Feature(id = 2, title = "t2", description = "d2", client = "c2", product_area = "p2")
 
 h = Feature(id = 3, title = "t3", description = "d3", client = "c3", product_area = "p3")
+
+
+curl -i http://127.0.0.1:5002/api/features

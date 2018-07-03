@@ -1,12 +1,15 @@
 import os
 
 from flask import Flask, jsonify, abort, request, make_response, url_for
+from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from json import dumps
 from app.models import Feature
 from app import db
+import json
+
 
 # from flask.ext.jsonpify import jsonify
 
@@ -18,19 +21,37 @@ db_connect = create_engine(database_file)
 app = Flask(__name__)
 api = Api(app)
 conn = db_connect.connect()
+auth = HTTPBasicAuth()
+
+@auth.get_password
+def get_password(username):
+    if username == 'iws':
+        return 'pass'
+    return None
 
 @app.errorhandler(400)
 def not_found(error):
 	return make_response(jsonify( { 'error': 'Bad request' } ), 400)
+
+@auth.error_handler
+def unauthorized():
+    return make_response(jsonify( { 'error': 'Unauthorized access' } ), 403)
+    # return 403 instead of 401 to prevent browsers from displaying the default auth dialog	
  
 @app.errorhandler(404)
 def not_found(error):
 	return make_response(jsonify( { 'error': 'Not found' } ), 404)
+
+def dress_it_up(data):
+	dressed = {"data": data}
+
+	return dressed
  
 class Features(Resource):
 	@app.route('/api/features', methods = ['GET'])
 	def get_all():
 		l, features = Features.query_all()
+		# type(features) is a <class 'flask.wrappers.Response'>
 		return features
 
 	def query_all():
@@ -43,22 +64,26 @@ class Features(Resource):
 			total += 1
 			# titles.append([{"title": c.title, "description": c.description, "client": c.client, "client_priority": c.client_priority, "target_date": c.target_date, "product_area": c.product_area}])
 			all_features.append({"id": c.id, "title": c.title, "description": c.description, "client": c.client, "product_area": c.product_area})
-		features = jsonify(all_features)
-		return total, features
+		all_features = {"features": all_features}
+		resp = make_response(jsonify(all_features))
+		resp.headers['Access-Control-Allow-Origin'] = '*'
+		return total, resp
 
-	@app.route('/api/feature', methods = ['GET'])
-	def get_one():
-		# TODO: Make or delete this
-		conn = db_connect.connect()
-		query = conn.execute("select * from feature")
+	# @app.route('/api/feature', methods = ['GET'])
+	# def get_one():
+	# 	# TODO: Make or delete this
+	# 	conn = db_connect.connect()
+	# 	query = conn.execute("select * from feature")
 
-		feature = filter(lambda t: t['id'] == feature_id, features)
-		if len(feature) == 0:
-			abort(404)
-		return jsonify( { 'feature': make_feature(feature[0]) } )		
+	# 	feature = filter(lambda t: t['id'] == feature_id, features)
+	# 	if len(feature) == 0:
+	# 		abort(404)
+	# 	return jsonify( { 'feature': make_feature(feature[0]) } )		
 
 	@app.route('/api/features', methods = ['POST'])
 	def create():
+
+
 		conn = db_connect.connect()
 		l, features = Features.query_all()
 		if not request.json or not 'title' in request.json:

@@ -16,82 +16,87 @@
 <div class="container">
     <div class="row" >
         <div class="col-sm-10 col-sm-offset-1">
-            <h1>Flask-Admin example</h1>
+            <h1>Feature </h1>
 			<table class="table table-striped" id="sortable">
-			    <tr >
-			    	<td style="width: 1px;"><b>Priority</b></td>
-			    	<td><b>Proposed Feature</b></td>
-			    	<td><b>Target Date</b></td>
-			    	<td><b>Client</b></td>
-			    	<td><b>Area</b></td>
-			    	<td><b>Options</b></td>
-			    </tr>
-			    <tr class="ui-state-default">
-			        <td>
-			        	<b>1</b>
+			    <thead>
+				    <tr>
+				    	<td style="width: 1px;"><b>Priority</b></td>
+				    	<td><b>Proposed Feature</b></td>
+				    	<td><b>Target Date</b></td>
+				    	<td><b>Client</b></td>
+				    	<td><b>Area</b></td>
+				    	<td><b>Options</b></td>
+				    </tr>
+			    </thead>
+			    <tbody>
+				    <tr class="ui-state-default">
+				        <td>
+				        	<b>1</b>
 
-			        </td>
-			        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
-			        <td>
-			        	11/27/1920
-			        </td>
-			        <td>
-			        	A Smart Client
-			        </td>
-			        <td>
-			        	Billing
-			        </td>
-			        <td>
-			            <button class="btn">Edit</button>
-			            <button class="btn">Delete</button>
-			            <!-- <span><button class="btn">Mark In Progress</button></span> -->
-			        </td>
-			    </tr>
-			    <tr class="ui-state-default">
-			        <td>
-			        	<b>2</b>
-			        </td>
-			        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
-			        <td>
-			        	11/27/1920
-			        </td>
-			        <td>
-			        	A Pain in the Ass Client
-			        </td>	        
-			        <td>
-			        	Billing
-			        </td>
-			        <td>
-			            <button class="btn">Edit</button>
-			            <button class="btn">Delete</button>
-			            <!-- <span><button class="btn">Mark In Progress</button></span> -->
-			        </td>
-			    </tr>
+				        </td>
+				        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
+				        <td>
+				        	11/27/1920
+				        </td>
+				        <td>
+				        	A Smart Client
+				        </td>
+				        <td>
+				        	Billing
+				        </td>
+				        <td>
+				            <button class="btn">Edit</button>
+				            <button class="btn">Delete</button>
+				            <!-- <span><button class="btn">Mark In Progress</button></span> -->
+				        </td>
+				    </tr>
+				    <tr class="ui-state-default">
+				        <td>
+				        	<b>2</b>
+				        </td>
+				        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
+				        <td>
+				        	11/27/1920
+				        </td>
+				        <td>
+				        	A Pain in the Ass Client
+				        </td>	        
+				        <td>
+				        	Billing
+				        </td>
+				        <td>
+				            <button class="btn">Edit</button>
+				            <button class="btn">Delete</button>
+				            <!-- <span><button class="btn">Mark In Progress</button></span> -->
+				        </td>
+				    </tr>
+				    <!-- ko foreach: features -->
+				    <tr class="ui-state-default">
+				        <td>
+				        	<b>2</b>
+				        </td>
+				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
+				        <td>
+				        	11/27/1920
+				        </td>
+				        <td>
+				        	<p data-bind="text: client">
+				        </td>	        
+				        <td>
+				        	<p data-bind="text: product_area">
+				        </td>
+				        <td>
+				            <button class="btn">Edit</button>
+				            <button class="btn">Delete</button>
+				            <!-- <span><button class="btn">Mark In Progress</button></span> -->
+				        </td>
+				    </tr>
+				    <!-- /ko -->
+			    </tbody>
 			</table>
-			<table class="table table-striped">
-				<tr><td style="width: 1px;"></td><td><b>Task</b></td><td><b>Options</b></td></tr>
-			    <!-- ko foreach: features -->
-			    <tr>
-			        <td>
-			            <span data-bind="visible: done" class="label label-success">Done</span>
-			            <span data-bind="visible: !done()" class="label label-important">In Progress</span>
-			        </td>
-			        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"></p></td>
-			        <td>
-			            <button data-bind="click: $parent.beginEdit" class="btn">Edit</button>
-			            <button data-bind="click: $parent.remove" class="btn">Delete</button>
-			            <span data-bind="visible: done">
-			                <button data-bind="click: $parent.markInProgress" class="btn">Mark In Progress</button>
-			            </span>
-			            <span data-bind="visible: !done()">
-			                <button data-bind="click: $parent.markDone" class="btn">Mark Done</button>
-			            </span>
-			        </td>
-			    </tr>
-			    <!-- /ko -->
-			</table>
-			<button data-bind="click: beginAdd" class="btn">Add Task</button>
-			<button data-bind="click: beginAdd" class="btn">Commit</button>
+			<div></div>
+<!-- 			<button data-bind="click: beginAdd" class="btn">Add Task</button>
+			<button data-bind="click: beginAdd" class="btn">Commit</button> -->
 		</div>
 	</div>
 </div>
@@ -119,10 +124,10 @@
 <script type="text/javascript">
 	function TasksViewModel() {
 	        var self = this;
-	        self.featuresURI = 'http://localhost:5000/api/features';
-	        // self.username = "miguel";
-	        // self.password = "python";
-	        self.features = ko.observableArray();
+	        self.featuresURI = 'http://localhost:5002/api/features';
+	        self.username = "iws";
+	        self.password = "pass";
+	        self.features =  ko.observableArray();
 
 	        self.ajax = function(uri, method, data) {
 	            var request = {
@@ -161,12 +166,21 @@
 	        }
 
 	        self.ajax(self.featuresURI, 'GET').done(function(data) {
+
 	            for (var i = 0; i < data.features.length; i++) {
+
+	                // self.features.push({
+	                //     title: ko.observable(data.features[i].title),
+	                //     description: ko.observable(data.features[i].description),
+	                //     id: ko.observable(data.features[i].id)
+	                //     client: ko.observable(data.features[i].client)
+	                //     product_area: ko.observable(data.features[i].product_area)
+	                // });
 	                self.features.push({
 	                    title: ko.observable(data.features[i].title),
 	                    description: ko.observable(data.features[i].description),
-	                    id: ko.observable(data.features[i].id)
-	                    client: ko.observable(data.features[i].client)
+	                    id: ko.observable(data.features[i].id),
+	                    client: ko.observable(data.features[i].client),
 	                    product_area: ko.observable(data.features[i].product_area)
 	                });
 	            }
