@@ -1,17 +1,22 @@
-from flask import Flask, jsonify, abort, request, make_response, url_for
+from flask import Flask, jsonify, abort, request, make_response, url_for, \
+	Blueprint, render_template, flash, g, session, redirect
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
-from db_start import app 
-from config import Config
+# from flask_apiblueprint import APIBlueprint
+
+from server import app 
+from server import db
+
 
 # Take app and auth out of app and put them somewhere else?
 # from app import app
 # from app import auth
 
-# from models.feature import Feature
+from server.models.feature import Feature
 
-
-app.config.from_object(Config)
+fapi = Blueprint('fapi', __name__, url_prefix='/api')
+# app.register_blueprint(fapi)
+print "CONTROLLER"
 # import os
 # from sqlalchemy import create_engine
 # from sqlalchemy.orm import sessionmaker
@@ -38,23 +43,23 @@ app.config.from_object(Config)
 #         return 'pass'
 #     return None
 
-@app.errorhandler(400)
-def bad_request(error):
-	return make_response(jsonify( { 'error': 'Bad request' } ), 400)
+# @app.errorhandler(400)
+# def bad_request(error):
+# 	return make_response(jsonify( { 'error': 'Bad request' } ), 400)
 
 # @auth.error_handler
 # def unauthorized():
 #     return make_response(jsonify( { 'error': 'Unauthorized access' } ), 403)
     # return 403 instead of 401 to prevent browsers from displaying the default auth dialog	
  
-@app.errorhandler(404)
-def not_found(error):
-	return make_response(jsonify( { 'error': 'Not found' } ), 404)
+# @app.errorhandler(404)
+# def not_found(error):
+# 	return make_response(jsonify( { 'error': 'Not found' } ), 404)
 
-
-
-@app.route('/api/features', methods = ['GET'])
-def query_all(query):
+# @app.route('/api/features', methods = ['GET'])
+@fapi.route('/features', methods = ['GET'])
+def query_all():
+	print "QUERRRY ALLLLLL"
 	# TODO: Come back and redo this the right way.
 	conn = db_connect.connect()
 	query = conn.execute("select * from feature")

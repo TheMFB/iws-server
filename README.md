@@ -41,14 +41,15 @@ Required modules:
 * flask 
 * sqlalchemy 
 * flask-sqlalchemy
-* flask-jsonpify 
+* flask-jsonpify  X
 * flask-restful
 * flask-bootstrap
 * flask-migrate
 * flask-httpauth
 * flask-wtf
+* flask-apiblueprint
 
-
+flask, sqlalchemy, flask-alchemy, flask-restful, flask-bootstrap, flask-migrate, flask-httpauth, flask-wtf
 
 
 
@@ -121,15 +122,16 @@ flask db upgrade
 >>> from app import db
 >>> from app.models import Feature
 
-Now ?:
-from run_api import db
-from app.models.feature import Feature
+Now :
+from db_start import db
+from models.feature import Feature
 
 
-db.session.add(Feature(...))
-db.session.commit()
+
 
 >>> f = Feature(title="t2", description="d2", client="c2", client_priority="2", target_date=datetime.datetime(2222, 2, 2), product_area="p2")
+
+f = Feature(id="1", title="t2", description="d2", client="c2", product_area="p2")
 
 f = {"id"=5, title":"t3", "description":"d3", "client":"c3", "product_area":"p3"}
 
@@ -137,8 +139,13 @@ f = {"id"=5, title":"t3", "description":"d3", "client":"c3", "product_area":"p3"
 f = Feature(id="1", title="t1", description="d1", client="c1", product_area="p1")
 g = Feature(id = 2, title = "t2", description = "d2", client = "c2", product_area = "p2")
 
-h = Feature(id = 3, title = "t3", description = "d3", client = "c3", product_area = "p3")
+h = Feature(id = "1", title = "t3", description = "d3", client = "c3", product_area = "p3")
 
+db.create_all()
+db.session.add(Feature(...))
+db.session.commit()
+
+db.session.close()
 
 curl -i http://127.0.0.1:5002/api/features
 
