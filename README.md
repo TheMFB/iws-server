@@ -78,18 +78,33 @@ Current tasks:
 __________________________________________________
 
 		# TODO: Add a random string module(shortid.generate - as type in the models) (Also, pull all of these into a blueprints/routes file, no class)
-		# All decorated mehods into a controllers folder, features.py
-		# models folder, and put Feature file into it.
-		# controller will import the models it needs. (Kind of like Oshen)
-		# db.py for db_connect.connect(). only do this once. 
-		# class should be Feature and into models. feature.py
-		# everythin app.route needs to be moved. always plural the addresses.
-		# db.py should be connected there. select, create statements can go there.
+		
+		
+		
+		
+		
+		
 		# run puts on everything that's changed (or all of it, based on jquery) - to put (or update) request which can change just the parts that have changed. Do it every time.
 			 # Save this for last, mockup if we need. put_many/update_many.
 		# first pull the models and controller.
 
-		# 
+
+
+
+
+
+
+
+
+
+* Controller
+	all decorated methods goes into here. (features.py)
+	imports the models it needs
+* Routes
+	all addresses should be pluraled
+* db.py
+	hosts the db info so that we only call db_connect.connect() once.
+	create statements can go there. ? abstracted querries.
 
 
 __________________________________________________
@@ -105,6 +120,10 @@ flask db upgrade
 
 >>> from app import db
 >>> from app.models import Feature
+
+Now ?:
+from run_api import db
+from app.models.feature import Feature
 
 
 db.session.add(Feature(...))
@@ -122,3 +141,20 @@ h = Feature(id = 3, title = "t3", description = "d3", client = "c3", product_are
 
 
 curl -i http://127.0.0.1:5002/api/features
+
+_______________________________
+~/dev/iws/iws-server/src/web-app$ python3 run_webapp.py
+~/dev/iws/iws-server/src/server$ python3 run_api.py
+
+
+		# TODO: Add a random string module(shortid.generate - as type in the models) (Also, pull all of these into a blueprints/routes file, no class)
+		# All decorated mehods into a controllers folder, features.py
+		# models folder, and put Feature file into it.
+		# controller will import the models it needs. (Kind of like Oshen)
+		# db.py for db_connect.connect(). only do this once. 
+		# class should be Feature and into models. feature.py
+		# everythin app.route needs to be moved. always plural the addresses.
+		# db.py should be connected there. select, create statements can go there.
+		# run puts on everything that's changed (or all of it, based on jquery) - to put (or update) request which can change just the parts that have changed. Do it every time.
+			 # Save this for last, mockup if we need. put_many/update_many.
+		# first pull the models and controller.
