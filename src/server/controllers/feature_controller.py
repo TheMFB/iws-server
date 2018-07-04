@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, abort, request, make_response, url_for
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api
+from db_start import app 
+from config import Config
 
 # Take app and auth out of app and put them somewhere else?
 # from app import app
@@ -9,7 +11,7 @@ from flask_restful import Resource, Api
 # from models.feature import Feature
 
 
-
+app.config.from_object(Config)
 # import os
 # from sqlalchemy import create_engine
 # from sqlalchemy.orm import sessionmaker
@@ -31,37 +33,31 @@ from flask_restful import Resource, Api
 
 
 # @auth.get_password
-def get_password(username):
-    if username == 'iws':
-        return 'pass'
-    return None
+# def get_password(username):
+#     if username == 'iws':
+#         return 'pass'
+#     return None
 
-# @app.errorhandler(400)
-def bad_request():
+@app.errorhandler(400)
+def bad_request(error):
 	return make_response(jsonify( { 'error': 'Bad request' } ), 400)
 
 # @auth.error_handler
-def unauthorized():
-    return make_response(jsonify( { 'error': 'Unauthorized access' } ), 403)
+# def unauthorized():
+#     return make_response(jsonify( { 'error': 'Unauthorized access' } ), 403)
     # return 403 instead of 401 to prevent browsers from displaying the default auth dialog	
  
-# @app.errorhandler(404)
-def not_found():
+@app.errorhandler(404)
+def not_found(error):
 	return make_response(jsonify( { 'error': 'Not found' } ), 404)
 
-# class FeatureHelper(Resource):
-# 	print('IT FOUND ME')
 
-# @app.route('/api/features', methods = ['GET'])
-# def get_all():
-# 	print('HELLO HELLLLOOOOOOO')
-# 	l, features = query_all()
-# 	return features
 
-# @app.route('/api/features', methods = ['GET'])
+@app.route('/api/features', methods = ['GET'])
 def query_all(query):
 	# TODO: Come back and redo this the right way.
-	# conn = db_connect.connect()
+	conn = db_connect.connect()
+	query = conn.execute("select * from feature")
 	all_features = []
 	for c in query:
 		# titles.append([{"title": c.title, "description": c.description, "client": c.client, "client_priority": c.client_priority, "target_date": c.target_date, "product_area": c.product_area}])

@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import db
+from db_start import db
 import uuid
 
 
@@ -15,3 +15,19 @@ class Feature(db.Model):
 
     def __repr__(self):
         return '<Feature {}>'.format(self.title)
+
+def init_db():
+    db.create_all()
+
+    # # Create a test user
+    # new_user = User('a@a.com', 'aaaaaaaa')
+    # new_user.display_name = 'Nathan'
+    # db.session.add(new_user)
+    # db.session.commit()
+
+    # new_user.datetime_subscription_valid_until = datetime.datetime(2019, 1, 1)
+    # db.session.commit()
+
+
+if __name__ == '__main__':
+    init_db()
