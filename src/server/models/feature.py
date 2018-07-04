@@ -4,7 +4,7 @@ import uuid
 
 
 class Feature(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     # id = db.Column(uuid.uuid4(), primary_key=True)
     title = db.Column(db.String(64), index=True, unique=True)
     description = db.Column(db.String(120))

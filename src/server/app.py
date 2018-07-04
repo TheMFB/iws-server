@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, make_response, url_for
+from flask import Flask, request, make_response, url_for, current_app
 
 from flask_restful import Resource, Api
 from flask_migrate import Migrate, MigrateCommand
@@ -16,8 +16,9 @@ from sqlalchemy.orm import sessionmaker
 # from json import dumps
 # from app.models import Feature
 # from app import db
-from controllers.feature import FeatureHelper
+# from .controller import print_me
 
+# from controllers.feature_controller import *
 
 # from flask.ext.jsonpify import jsonify
 
@@ -28,6 +29,10 @@ db_connect = create_engine(database_file)
 
 app = Flask(__name__)
 app.config.from_object(Config)
+# print('NEWTEST')
+# with app.app_context():
+# 	print(current_app.name)
+
 api = Api(app)
 db = SQLAlchemy(app)
 
@@ -40,11 +45,17 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 conn = db_connect.connect()
+
 auth = HTTPBasicAuth()
 
+# app.errorhandler(400)(make_response(jsonify( { 'error': 'Bad request' } ), 400))
+# app.errorhandler(404)(not_found())
+# app.route('/api/features', methods = ['GET'])(query_all(query = conn.execute("select * from feature")))
 
 
 if __name__ == '__main__':
+	# only run if file is executed directly (not from importing)
+
 	# manager.run()
 	app.run(port='5002')
 
