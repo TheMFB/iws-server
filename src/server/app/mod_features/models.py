@@ -1,4 +1,7 @@
 from app import db, migrate
+
+from sqlalchemy import update
+
 import datetime
 import uuid
 
@@ -24,25 +27,33 @@ def get_all():
         all_features.append({"id": c.id, "title": c.title, "description": c.description, "client": c.client, "client_priority": c.client_priority, "target_date": c.target_date, "product_area": c.product_area})
     return all_features
 
-def create(f):
+def add(f):
     try:
         db.session.add(f)
         db.session.commit()
         return 'Feature Created', 201
     except Exception as e:
         print e
-        return 'An error was raised while creating. This probably wasn\'t too helpful', 500
+        return 'An error was raised while creating.', 500
 
-
-
-def remove(f):
+def update(id, content):
     try:
-        Feature.query.filter_by(id=f).delete()
+        print 'update started'
+        Feature.query.filter_by(id=id).update(content)
+        db.session.commit()
+        return 'Updated feature', 201
+    except Exception as e:
+        print e
+        return 'An error was raised while updating.', 500
+
+def remove(id):
+    try:
+        Feature.query.filter_by(id=id).delete()
         db.session.commit()
         return 'Removed Feature', 201
     except Exception as e:
         print e
-        return 'An error was raised while removing. This probably wasn\'t too helpful', 500
+        return 'An error was raised while removing.', 500
 
 def remove_all():
     try:
@@ -53,7 +64,7 @@ def remove_all():
         return 'Removed ALL features', 201
     except Exception as e:
         print e
-        return 'An error was raised while removing. This probably wasn\'t too helpful', 500
+        return 'An error was raised while removing everything.', 500
 
 
 # def init_db():
