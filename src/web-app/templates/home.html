@@ -4,9 +4,22 @@
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
 <!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script> -->
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!-- <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
 <style>
   #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
   #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
@@ -16,7 +29,7 @@
 <div class="container">
     <div class="row" >
         <div class="col-sm-10 col-sm-offset-1">
-            <h1>Feature </h1>
+            <h1>Proposed Features </h1>
 			<table class="table table-striped" id="sortable">
 			    <thead>
 				    <tr>
@@ -29,64 +42,24 @@
 				    </tr>
 			    </thead>
 			    <tbody>
-				    <tr class="ui-state-default">
-				        <td>
-				        	<b>1</b>
-
-				        </td>
-				        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
-				        <td>
-				        	11/27/1920
-				        </td>
-				        <td>
-				        	A Smart Client
-				        </td>
-				        <td>
-				        	Billing
-				        </td>
-				        <td>
-				            <button class="btn">Edit</button>
-				            <button class="btn">Delete</button>
-				            <!-- <span><button class="btn">Mark In Progress</button></span> -->
-				        </td>
-				    </tr>
-				    <tr class="ui-state-default">
-				        <td>
-				        	<b>2</b>
-				        </td>
-				        <td><p><b>Task title</b></p><p>Task description. This is where they are going to have a long description of the feature at hand. Nothing too much else for this. Just figuring out everything that we want to put here. asdj sadfkpj asfnlkasdf hasdkfjsdfllkjas dflkjasdflb asjfaj asdlkjsfpoiasdsh </p></td>
-				        <td>
-				        	11/27/1920
-				        </td>
-				        <td>
-				        	A Pain in the Ass Client
-				        </td>	        
-				        <td>
-				        	Billing
-				        </td>
-				        <td>
-				            <button class="btn">Edit</button>
-				            <button class="btn">Delete</button>
-				            <!-- <span><button class="btn">Mark In Progress</button></span> -->
-				        </td>
-				    </tr>
 				    <!-- ko foreach: features -->
 				    <tr class="ui-state-default">
 				        <td>
-				        	<b>2</b>
+				        	<b data-bind="text: client_priority"></b>
 				        </td>
 				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
 				        <td>
-				        	11/27/1920
+				        	<b data-bind="text: target_date"></b>
 				        </td>
 				        <td>
-				        	<p data-bind="text: client">
-				        </td>	        
-				        <td>
-				        	<p data-bind="text: product_area">
+				        	<p data-bind="text: client"></p>
 				        </td>
 				        <td>
-				            <button class="btn">Edit</button>
+				        	<p data-bind="text: product_area"></p>
+				        </td>
+				        <td>
+
+				            <button type="button" class="btn" data-toggle="modal" data-target="#editFeatureModal">Edit</button>
 				            <button class="btn">Delete</button>
 				            <!-- <span><button class="btn">Mark In Progress</button></span> -->
 				        </td>
@@ -95,12 +68,145 @@
 			    </tbody>
 			</table>
 			<div></div>
-<!-- 			<button data-bind="click: beginAdd" class="btn">Add Task</button>
-			<button data-bind="click: beginAdd" class="btn">Commit</button> -->
+<!-- 			<button data-bind="click: beginAdd" class="btn">Add Task</button> -->
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal">
+				Add Feature
+			</button>
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="addFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addFeatureModalLabel">Add a New Feature</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		<form>
+			<div class="form-group">
+				<label for="titleInput">Add or Select a Client</label>
+				<div class="input-group mb-3">
+					<!-- <input type="text" class="form-control" aria-label="Text input with checkbox"> -->
+					<input type="text" class="form-control" aria-label="Text input with checkbox" data-bind="enable: undefined == selectedClient() || selectedClient().length < 1, value:clientToAdd, valueUpdate: 'afterkeydown'" placeholder='Add a New Client'>
+					<div class="input-group-prepend">
+			    		<div class="input-group-text">
+<!-- 			       			<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: clientRoster"> -->
+<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1 && clientToAdd().length < 1, options: clientRoster, optionsCaption: 'Select a Client', value:selectedClient, valueAllowUnset: true">
+					    	</select>
+			   			</div>
+			  		</div>
+				</div>
+			</div>
 
+		  <div class="form-group">
+		    <label for="titleInput">Proposed Feature Title</label>
+		    <input type="email" class="form-control" id="titleInputForm" placeholder="title" data-bind="value:createTitle">
+		  </div>
+		  <div class="form-group">
+		    <label for="descriptionArea">Description</label>
+		    <textarea class="form-control" id="descriptionForm" rows="3" data-bind="value:createDescription"></textarea>
+		  </div>
+	    <form method="post">
+	      <div class="form-group">
+	        <label class="control-label" for="date">Date</label>
+	        <input class="form-control datepicker" id="date" name="date" placeholder="MM/DD/YYY" data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: createTargetDate"/>
+	      </div>
+	     </form>
+		  <div class="form-group">
+		    <label for="areaSelect">Product Area</label>
+		    <select class="form-control" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: 'Select an Area', value:createProductArea"></select>
+		  </div>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bind="click: testStuff">Add This Feature</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+<div class="modal fade" id="editFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editing a Feature</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		<form>
+
+		  <div class="form-group row">
+		    <label for="clientSelect">Select Client</label>
+		    <select class="form-control" id="clientSelectForm">
+		      <option selected>Select a Current Client</option>
+		      <option>1</option>
+		      <option>2</option>
+		      <option>3</option>
+		      <option>4</option>
+		      <option>5</option>
+		      <option>Add</option>
+		    </select>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addClientModal">
+		  </div>
+
+		  <div class="form-group">
+		    <label for="titleInput">Proposed Feature Title</label>
+		    <input type="email" class="form-control" id="titleInputForm" placeholder="title">
+		  </div>
+		  <div class="form-group">
+		    <label for="descriptionArea">Description</label>
+		    <textarea class="form-control" id="descriptionForm" rows="3"></textarea>
+		  </div>
+	    <form method="post">
+	      <div class="form-group">
+	        <label class="control-label" for="date">Date</label>
+	        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+	      </div>
+	     </form>
+		  <div class="form-group">
+		    <label for="areaSelect">Product Area</label>
+		    <select class="form-control" id="areaSelectForm">
+		      <option>Policies</option>
+		      <option>Billing</option>
+		      <option>Claims</option>
+		      <option>Reports</option>
+		    </select>
+		  </div>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Add This Feature</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add a New Feature</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Add This Feature</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div> -->
 <script>
 	var fixHelperModified = function(e, tr) {
 	    var $originals = tr.children();
@@ -121,71 +227,170 @@
 	    stop: updateIndex
 	}).disableSelection();
 </script>
-<script type="text/javascript">
-	function TasksViewModel() {
-	        var self = this;
-	        self.featuresURI = 'http://localhost:5002/api/features';
-	        self.username = "iws";
-	        self.password = "pass";
-	        self.features =  ko.observableArray();
-
-	        self.ajax = function(uri, method, data) {
-	            var request = {
-	                url: uri,
-	                type: method,
-	                contentType: "application/json",
-	                accepts: "application/json",
-	                cache: false,
-	                dataType: 'json',
-	                data: JSON.stringify(data),
-	                beforeSend: function (xhr) {
-	                    xhr.setRequestHeader("Authorization", 
-	                        "Basic " + btoa(self.username + ":" + self.password));
-	                },
-	                error: function(jqXHR) {
-	                    console.log("ajax error " + jqXHR.status);
-	                }
-	            };
-	            return $.ajax(request);
-	        }
-
-	        self.beginAdd = function() {
-	            alert("Add");
-	        }
-	        self.beginEdit = function(feature) {
-	            alert("Edit: " + feature.title());
-	        }
-	        self.remove = function(feature) {
-	            alert("Remove: " + feature.title());
-	        }
-	        self.markInProgress = function(feature) {
-	            feature.done(false);
-	        }
-	        self.markDone = function(feature) {
-	            feature.done(true);
-	        }
-
-	        self.ajax(self.featuresURI, 'GET').done(function(data) {
-
-	            for (var i = 0; i < data.features.length; i++) {
-
-	                // self.features.push({
-	                //     title: ko.observable(data.features[i].title),
-	                //     description: ko.observable(data.features[i].description),
-	                //     id: ko.observable(data.features[i].id)
-	                //     client: ko.observable(data.features[i].client)
-	                //     product_area: ko.observable(data.features[i].product_area)
-	                // });
-	                self.features.push({
-	                    title: ko.observable(data.features[i].title),
-	                    description: ko.observable(data.features[i].description),
-	                    id: ko.observable(data.features[i].id),
-	                    client: ko.observable(data.features[i].client),
-	                    product_area: ko.observable(data.features[i].product_area)
-	                });
-	            }
-	        });
-	    }
-	    ko.applyBindings(new TasksViewModel(), $('#main')[0]);
+<!-- Calendar Form -->
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'mm/dd/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
 </script>
+
+<script type="text/javascript">
+	function FeaturesViewModel() {
+        var self = this;
+        self.featuresURI = 'http://127.0.0.1:8080/v1/features/';
+        // self.username = "iws";
+        // self.password = "pass";
+        self.features =  ko.observableArray();
+
+        
+
+        self.ajax = function(uri, method, data) {
+            var request = {
+                url: uri,
+                type: method,
+                contentType: "application/json",
+                accepts: "application/json",
+                cache: false,
+                dataType: 'json',
+                data: JSON.stringify(data),
+                header: {'Access-Control-Allow-Origin': "*"},
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization",
+                        "Basic " + btoa(self.username + ":" + self.password));
+                },
+                error: function(jqXHR) {
+                    console.log("ajax error " + jqXHR.status);
+                }
+            };
+            return $.ajax(request);
+        }
+
+        self.clientRoster = ko.observableArray([]);
+        this.clientToAdd = ko.observable("");
+        this.selectedClient = ko.observable("");
+       	
+       	this.createTitle = ko.observable("");
+       	this.createDescription = ko.observable("");
+       	this.createTargetDate = ko.observable(moment());
+
+       	this.createProductArea = ko.observable("");
+       	this.productAreaArray = ko.observableArray(['Policies', 'Billing', 'Claims', 'Reports']);
+
+
+
+        var createFeatureModel = {
+        	selected_client: this.selectedClient(),
+        	added_client: this.clientToAdd(),
+        	title: this.createTitle(),
+        	description: this.createDescription(),
+	       	target_date: this.createTargetDate(),
+	       	product_area: this.createProductArea()
+
+        };
+
+        this.convertDate = function(date) {
+        	return moment(date).format('MM/DD/YYYY');
+        }
+
+        $(document).ready(function () {   
+		    //apply the datepicker to field
+		    $('.datepicker').datepicker();
+		}); 
+
+	    this.testStuff = function() {
+	    	console.log({
+		    	client: this.selectedClient() || this.clientToAdd(),
+	        	selected_client: this.selectedClient(),
+	        	added_client: this.clientToAdd(),
+	        	title: this.createTitle(),
+	        	description: this.createDescription(),
+		       	target_date: this.createTargetDate(),
+		       	date: this.createTargetDate().getDate(),
+		       	month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
+		       	day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
+		       	year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
+		       	product_area: this.createProductArea()
+        	});
+        	lowestPriority('TEST ME');
+	    };
+
+	    this.sendRequest = function() {
+	    	data = {
+		    	title: this.createTitle(),
+		    	description: this.createDescription(),
+		    	client: this.selectedClient() || this.clientToAdd(),
+	        	selected_client: this.selectedClient(),
+	        	added_client: this.clientToAdd(),	        	
+		       	target_date: this.createTargetDate(),
+		       	date: this.createTargetDate().getDate(),
+		       	month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
+		       	day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
+		       	year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
+		       	product_area: this.createProductArea()
+        	};
+        	self.ajax(self.featuresURI, 'POST', data);
+        	console.log('sent request')
+	    }
+
+	    this.lowestPriority = function(client) {
+	    	var count = 0;
+	    	for(var i = 0; i < this.features.length; ++i){
+	    		if(this.features[i]['client'] = client) {
+	    			count++
+	    			}
+	    		}
+	    	console.log('number of clients');
+	    	}
+
+	    }
+
+        self.ajax(self.featuresURI, 'GET').done(function(data) {
+        	console.log(data);
+        	self.clientList = [];
+            for (var i = 0; i < data.length; i++) {
+                self.features.push({
+                    id: ko.observable(data[i].id),
+                    title: ko.observable(data[i].title),
+                    description: ko.observable(data[i].description),
+                    client: ko.observable(data[i].client),
+                    client_priority: ko.observable(data[i].client_priority),
+                    target_date: ko.observable(data[i].target_date),
+                    product_area: ko.observable(data[i].product_area)
+                });
+                if (!self.clientList.includes(data[i].client)) {
+                	self.clientList.push(data[i].client);
+                	self.clientRoster.push(data[i].client);
+                };
+            }          
+        });
+
+
+    }
+
+
+	ko.bindingHandlers.datepicker = {
+	    init: function (element, valueAccessor, allBindingsAccessor) {
+	        var options = allBindingsAccessor().datepickerOptions || {};
+	        $(element).datepicker(options).on("changeDate", function (ev) {
+	            var observable = valueAccessor();
+	            observable(ev.date);
+	        });
+	    },
+	    update: function (element, valueAccessor) {
+	        var value = ko.utils.unwrapObservable(valueAccessor());
+	        $(element).datepicker("setValue", value);
+	    }
+	}; 
+
+    ko.applyBindings(new FeaturesViewModel(), $('#main')[0]);
+</script>
+
 {% endblock body %}

@@ -35,11 +35,10 @@ Run the webserver:
 Note that Chrome does not support localhost CORS requests. Use Firefox, set --disable-web-security flag when opening Chrome, or install the "Allow-Control-Allow-Origin: * Chrome Extension": https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
 or similar CORS extension.
 
-
-
 Required modules:
 * flask 
 * sqlalchemy 
+* sqlalchemy_utils
 * flask-sqlalchemy
 * flask-jsonpify  X
 * flask-restful
@@ -47,7 +46,10 @@ Required modules:
 * flask-migrate
 * flask-httpauth
 * flask-wtf
-* flask-apiblueprint
+* flask-cors
+
+bower install jquery-editable-select
+bower install moment
 
 flask, sqlalchemy, flask-alchemy, flask-restful, flask-bootstrap, flask-migrate, flask-httpauth, flask-wtf
 

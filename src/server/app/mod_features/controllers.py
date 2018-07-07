@@ -9,11 +9,11 @@ mod_features = Blueprint('features', __name__, url_prefix='/v1/features')
 
 @mod_features.route('/', methods=['GET'])
 def get_all_features():
-    print 'controller'
     #feature_query = Feature.query.all()
     featuring_json_derulo = jsonify(get_all())
     resp = make_response(featuring_json_derulo)
-    resp.headers['Access-Control-Allow-Origin'] = '*'
+    # resp.headers['Access-Control-Allow-Origin']='*'
+    # resp.headers['Access-Control-Allow-Credentials']='true'
     return resp
 
 @mod_features.route('/', methods = ['POST'])
