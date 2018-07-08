@@ -28,7 +28,7 @@
 						<button class="btn btn-primary" data-bind="click: updatePriority" type="button">Add Feature</button>
 					</div>
 					<div class="input-group-text">
-						<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1, options: clientRoster, optionsCaption: 'Go to Client', value:selectedClientFilter, valueAllowUnset: true">
+						<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1, options: clientRoster, optionsCaption: 'Go to Client', value:selectedClientFilter, valueAllowUnset: true, click: updatePriority">
 				    	</select>
 		   			</div>
 		   		</div>
@@ -44,9 +44,6 @@
 				    	<th data-bind="if: selectedClientFilter"><b>Options</b></th>
 				    </tr>
 			    </thead>
-
-
-
 			    <tbody data-bind="foreach: getFilteredFeatures()">
 
 				    <tr class="ui-state-default" data-bind="attr: { id: id }">
@@ -67,47 +64,14 @@
 				        </td>
 				        <td data-bind="if: editable">
 				        	<div class="btn-group" role="group" aria-label="Basic example">
-				        		<!-- <button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {this.delete_me = id()}" data-target="#editFeatureModal">Edit</button> -->
-				        		<button data-bind="click: function () { console.log($parent); }"> Parent Log </button>
-
-				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.testStuff(id())}" data-target="#editFeatureModal">Edit</button>
-				            	<button class="btn btn-danger" data-toggle="modal" data-bind="click: function() {$parent.delete_me = id()}" data-target="#confirm-delete">Delete</button>
+				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.client_id = id(), $parent.updateTitle = clone(title())}" data-target="#editFeatureModal">Edit</button>
+				            	<!-- <button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.feature_id_to_update = id(); $parent.updateTitle = title(); $parent.updateDescription = description(); $parent.updateTargetDate = target_date(); $parent.updateProductArea = product_area()}" data-target="#editFeatureModal">Edit</button> -->
+				            	<button class="btn btn-danger" data-toggle="modal" data-bind="click: function() {$parent.client_id = id()}" data-target="#confirm-delete">Delete</button>
 				        	</div>
 				        </td>
 				    </tr>
 			    </tbody>
 			</table>
-			<!--<table class="table table-striped" id="features-table" data-bind="visible: !($data.selectedClientFilter() !== undefined )">
-			    <thead>
-				    	<tr>
-				    	<th><b>Proposed Feature</b></th>
-				    	<th><b>Target Date</b></th>
-				    	<th><b>Client</b></th>
-				    	<th><b>Area</b></th>
-				    	<th><b>Options</b></th>
-				    </tr> 
-			    </thead>
-			    <tbody>
-				    <tr class="ui-state-default" data-bind="id: id">
-				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
-				        <td>
-				        	<p data-bind="text: target_date"></p>
-				        </td>
-				        <td>
-				        	<p data-bind="text: client"></p>
-				        </td>
-				        <td>
-				        	<p data-bind="text: product_area"></p>
-				        </td>
-				        <td>
-				        	<div class="btn-group" role="group" aria-label="Basic example">
-				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editFeatureModal">Edit</button>
-				            	<button class="btn btn-danger">Delete</button>
-				        	</div>
-				        </td>
-				    </tr>
-			    </tbody>
-			</table>-->
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal">
 				Add Feature
 			</button>
@@ -164,100 +128,64 @@
     	</div>
   	</div>
 </div>
+<div class="modal fade" id="editFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ 	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title" id="editFeatureModalLabel">Edit Feature</h5>
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true">&times;</span>
+        		</button>
+      		</div>
+      		<div class="modal-body">
+				<form>
+					<button data-bind="click: function () { console.log($data); }"> Current Data Log </button>
+					<button data-bind="click: function () { console.log($parent); }"> Parent Log </button>
+
+		  			<div class="form-group">
+		   				<label for="titleInput">Proposed Feature Title</label>
+		    			<input type="email" class="form-control" id="titleInputForm" data-bind="textInput: updateTitle()">
+		  			</div>
+		  			<div class="form-group">
+		    			<label for="descriptionArea">Description</label>
+		    			<textarea class="form-control" id="descriptionForm" rows="3" data-bind="value:updateDescription"></textarea>
+		  			</div>
+	    			<form method="post">
+	      				<div class="form-group">
+	        				<label class="control-label" for="date">Date</label>
+	        				<input class="form-control datepicker" id="date" name="date" placeholder="MM/DD/YYY" data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: updateTargetDate"/>
+	      				</div>
+	     			</form>
+		  			<div class="form-group">
+		    			<label for="areaSelect">Product Area</label>
+		    			<select class="form-control" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: 'Select an Area', value:updateProductArea"></select>
+		  			</div>
+				</form>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-primary" data-bind="click: sendUpdateRequest">Change this Feature</button>
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                ...
+                Warning!
             </div>
             <div class="modal-body">
-                ...
+                Are you sure you want to delete this feature?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button data-bind="click: function() {sendDelete(delete_me)}"class="btn btn-danger btn-ok">Delete</button>
+                <button data-bind="click: function() {sendDelete(client_id)}"class="btn btn-danger btn-ok">Delete</button>
             </div>
         </div>
     </div>
 </div>
-<!-- 
-<div class="modal fade" id="editFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Editing a Feature</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-		<form>
 
-		  <div class="form-group row">
-		    <label for="clientSelect">Select Client</label>
-		    <select class="form-control" id="clientSelectForm">
-		      <option selected>Select a Current Client</option>
-		      <option>1</option>
-		      <option>2</option>
-		      <option>3</option>
-		      <option>4</option>
-		      <option>5</option>
-		      <option>Add</option>
-		    </select>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addClientModal">
-		  </div>
-
-		  <div class="form-group">
-		    <label for="titleInput">Proposed Feature Title</label>
-		    <input type="email" class="form-control" id="titleInputForm" placeholder="title">
-		  </div>
-		  <div class="form-group">
-		    <label for="descriptionArea">Description</label>
-		    <textarea class="form-control" id="descriptionForm" rows="3"></textarea>
-		  </div>
-	    <form method="post">
-	      <div class="form-group">
-	        <label class="control-label" for="date">Date</label>
-	        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
-	      </div>
-	     </form>
-		  <div class="form-group">
-		    <label for="areaSelect">Product Area</label>
-		    <select class="form-control" id="areaSelectForm">
-		      <option>Policies</option>
-		      <option>Billing</option>
-		      <option>Claims</option>
-		      <option>Reports</option>
-		    </select>
-		  </div>
-		</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Add This Feature</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add a New Feature</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Add This Feature</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
 

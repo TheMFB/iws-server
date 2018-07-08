@@ -23,12 +23,10 @@ def get_feature_of_client(client_name):
     resp = make_response(jsonify(get_clients(client_name)))
     return resp
 
-    # client_name/filter
+    # change to "clients/client_name/filter"
 
 @mod_features.route('/', methods = ['POST'])
 def create_feature():
-	# if not request.json or not 'title' in request.json:
-	# 	abort(400)
 	f = Feature(\
 		title= request.json.get('title', "None"), \
 		description= request.json.get('description', "None"), \
@@ -45,19 +43,16 @@ def create_feature():
 @mod_features.route('/<feature_id>', methods = ['PUT'])
 def update_feature(feature_id):
 	content = request.json
-	# content = {
-	# 	'title': request.json.get('title', "None"),
-	# 	'description': request.json.get('description', "None"),
-	# 	'client': request.json.get('client', "None"),
-	# 	'client_priority': request.json.get('client_priority', 0),
-	# 	'target_date': datetime.datetime(
-	# 		request.json.get('target_date_year', datetime.date.today().year),
-	# 		request.json.get('target_date_month', datetime.date.today().month),
-	# 		request.json.get('target_date_day', datetime.date.today().day)),
-	# 	'product_area': request.json.get('product_area', "None")
-	# 	}
+	content = {
+		'title': request.json.get('title', "None"),
+		'description': request.json.get('description', "None"),
+		'target_date': datetime.datetime(
+			request.json.get('target_date_year', datetime.date.today().year),
+			request.json.get('target_date_month', datetime.date.today().month),
+			request.json.get('target_date_day', datetime.date.today().day)),
+		'product_area': request.json.get('product_area', "None")
+		}
 	return update(feature_id, content)
-
 
 @mod_features.route('/clients/<client_name>/priority/', methods = ['PUT'])
 def priority(client_name):
