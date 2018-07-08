@@ -27,6 +27,20 @@ def get_all():
         all_features.append({"id": c.id, "title": c.title, "description": c.description, "client": c.client, "client_priority": c.client_priority, "target_date": c.target_date, "product_area": c.product_area})
     return all_features
 
+def get_clients(client):
+    client_query = Feature.query.filter(Feature.client == client)
+    all_clients = []
+    for c in client_query:
+        all_clients.append({"id": c.id, "title": c.title, "description": c.description, "client": c.client, "client_priority": c.client_priority, "target_date": c.target_date, "product_area": c.product_area})
+    print all_clients
+    return all_clients
+
+def get_client_list():
+    client_list = []
+    for value in db.session.query(Feature.client).distinct():
+        client_list.append(value[0])
+    return client_list
+
 def add(f):
     try:
         db.session.add(f)

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, make_response, request
 
-from app.mod_features.models import Feature, get_all, add, update, remove, remove_all
+from app.mod_features.models import Feature, get_all, get_client_list, add, update, remove, remove_all, get_clients
 
 import datetime
 
@@ -9,11 +9,18 @@ mod_features = Blueprint('features', __name__, url_prefix='/v1/features')
 
 @mod_features.route('/', methods=['GET'])
 def get_all_features():
-    #feature_query = Feature.query.all()
     featuring_json_derulo = jsonify(get_all())
     resp = make_response(featuring_json_derulo)
-    # resp.headers['Access-Control-Allow-Origin']='*'
-    # resp.headers['Access-Control-Allow-Credentials']='true'
+    return resp
+
+@mod_features.route('/clients/', methods=['GET'])
+def get_all_clients():
+    resp = make_response(jsonify(get_client_list()))
+    return resp
+
+@mod_features.route('/clients/filter/<client_name>', methods=['GET'])
+def get_feature_of_client(client_name):
+    resp = make_response(jsonify(get_clients(client_name)))
     return resp
 
 @mod_features.route('/', methods = ['POST'])

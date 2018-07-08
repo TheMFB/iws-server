@@ -11,6 +11,8 @@
 <!-- <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
 
 <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -21,35 +23,51 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
 <style>
-  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+/*  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
   #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-  #sortable li span { position: absolute; margin-left: -1.3em; }
+  #sortable li span { position: absolute; margin-left: -1.3em; }*/
 </style>
 
 <div class="container">
     <div class="row" >
         <div class="col-sm-10 col-sm-offset-1">
+            <div class="page-header">
             <h1>Proposed Features </h1>
-			<table class="table table-striped" id="sortable">
+   				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+									<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal"> -->
+						<button class="btn btn-primary" data-bind="click: testStuff()" type="button">Add Feature</button>
+					</div>
+					<div class="input-group-text">
+						<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1, options: clientRoster, optionsCaption: 'Go to Client', value:selectedClientFilter, valueAllowUnset: true">
+				    	</select>
+		   			</div>
+		   		</div>
+        	</div>
+			<table class="table table-striped" id="sortable" data-bind="visible: ($data.selectedClientFilter() !== undefined )">
 			    <thead>
-				    <tr>
-				    	<td style="width: 1px;"><b>Priority</b></td>
-				    	<td><b>Proposed Feature</b></td>
-				    	<td><b>Target Date</b></td>
-				    	<td><b>Client</b></td>
-				    	<td><b>Area</b></td>
-				    	<td><b>Options</b></td>
-				    </tr>
+				    <!-- <tr> -->
+				    	<th style="width: 1px;"><b>Priority</b></th>
+				    	<th><b>Proposed Feature</b></th>
+				    	<th><b>Target Date</b></th>
+				    	<th><b>Client</b></th>
+				    	<th><b>Area</b></th>
+				    	<th><b>Options</b></th>
+				    <!-- </tr> -->
 			    </thead>
 			    <tbody>
 				    <!-- ko foreach: features -->
 				    <tr class="ui-state-default">
 				        <td>
-				        	<b data-bind="text: client_priority"></b>
+				        	<div class="btn-group-vertical">
+								<button class="btn btn-primary" type="button"><i class="fas fa-chevron-up"></i></button>
+								<button class="btn btn-primary" data-bind= "text: client_priority" type="button">Add Feature</button>
+								<button class="btn btn-primary" type="button"><i class="fas fa-chevron-down"></i></button>
+							</div>
 				        </td>
 				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
 				        <td>
-				        	<b data-bind="text: target_date"></b>
+				        	<p data-bind="text: target_date"></p>
 				        </td>
 				        <td>
 				        	<p data-bind="text: client"></p>
@@ -58,17 +76,49 @@
 				        	<p data-bind="text: product_area"></p>
 				        </td>
 				        <td>
-
-				            <button type="button" class="btn" data-toggle="modal" data-target="#editFeatureModal">Edit</button>
-				            <button class="btn">Delete</button>
-				            <!-- <span><button class="btn">Mark In Progress</button></span> -->
+				        	<div class="btn-group" role="group" aria-label="Basic example">
+				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editFeatureModal">Edit</button>
+				            	<button class="btn btn-danger">Delete</button>
+				        	</div>
 				        </td>
 				    </tr>
 				    <!-- /ko -->
 			    </tbody>
 			</table>
-			<div></div>
-<!-- 			<button data-bind="click: beginAdd" class="btn">Add Task</button> -->
+			<table class="table table-striped" data-bind="visible: !($data.selectedClientFilter() !== undefined )">
+			    <thead>
+				    <!-- <tr> -->
+				    	
+				    	<th><b>Proposed Feature</b></th>
+				    	<th><b>Target Date</b></th>
+				    	<th><b>Client</b></th>
+				    	<th><b>Area</b></th>
+				    	<th><b>Options</b></th>
+				    <!-- </tr> -->
+			    </thead>
+			    <tbody>
+				    <!-- ko foreach: features -->
+				    <tr class="ui-state-default">
+				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
+				        <td>
+				        	<p data-bind="text: target_date"></p>
+				        </td>
+				        <td>
+				        	<p data-bind="text: client"></p>
+				        </td>
+				        <td>
+				        	<p data-bind="text: product_area"></p>
+				        </td>
+				        <td>
+				        	<div class="btn-group" role="group" aria-label="Basic example">
+				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editFeatureModal">Edit</button>
+				            	<button class="btn btn-danger">Delete</button>
+				        	</div>
+				        </td>
+				    </tr>
+				    <!-- /ko -->
+			    </tbody>
+			</table>
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal">
 				Add Feature
 			</button>
@@ -76,57 +126,54 @@
 	</div>
 </div>
 <div class="modal fade" id="addFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addFeatureModalLabel">Add a New Feature</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-		<form>
-			<div class="form-group">
-				<label for="titleInput">Add or Select a Client</label>
-				<div class="input-group mb-3">
-					<!-- <input type="text" class="form-control" aria-label="Text input with checkbox"> -->
-					<input type="text" class="form-control" aria-label="Text input with checkbox" data-bind="enable: undefined == selectedClient() || selectedClient().length < 1, value:clientToAdd, valueUpdate: 'afterkeydown'" placeholder='Add a New Client'>
-					<div class="input-group-prepend">
-			    		<div class="input-group-text">
-<!-- 			       			<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: clientRoster"> -->
-<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1 && clientToAdd().length < 1, options: clientRoster, optionsCaption: 'Select a Client', value:selectedClient, valueAllowUnset: true">
-					    	</select>
-			   			</div>
-			  		</div>
-				</div>
-			</div>
-
-		  <div class="form-group">
-		    <label for="titleInput">Proposed Feature Title</label>
-		    <input type="email" class="form-control" id="titleInputForm" placeholder="title" data-bind="value:createTitle">
-		  </div>
-		  <div class="form-group">
-		    <label for="descriptionArea">Description</label>
-		    <textarea class="form-control" id="descriptionForm" rows="3" data-bind="value:createDescription"></textarea>
-		  </div>
-	    <form method="post">
-	      <div class="form-group">
-	        <label class="control-label" for="date">Date</label>
-	        <input class="form-control datepicker" id="date" name="date" placeholder="MM/DD/YYY" data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: createTargetDate"/>
-	      </div>
-	     </form>
-		  <div class="form-group">
-		    <label for="areaSelect">Product Area</label>
-		    <select class="form-control" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: 'Select an Area', value:createProductArea"></select>
-		  </div>
-		</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bind="click: testStuff">Add This Feature</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
+ 	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title" id="addFeatureModalLabel">Add a New Feature</h5>
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true">&times;</span>
+        		</button>
+      		</div>
+      		<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="titleInput">Add or Select a Client</label>
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" aria-label="Text input with checkbox" data-bind="enable: undefined == selectedClient() || selectedClient().length < 1, value:clientToAdd, valueUpdate: 'afterkeydown'" placeholder='Add a New Client'>
+							<div class="input-group-prepend">
+				    			<div class="input-group-text">
+									<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1 && (undefined == clientToAdd() || clientToAdd().length < 1), options: clientRoster, optionsCaption: 'Select a Client', value:selectedClient, valueAllowUnset: true">
+						    		</select>
+				   				</div>
+				  			</div>
+						</div>
+					</div>
+		  			<div class="form-group">
+		   				<label for="titleInput">Proposed Feature Title</label>
+		    			<input type="email" class="form-control" id="titleInputForm" placeholder="title" data-bind="value:createTitle">
+		  			</div>
+		  			<div class="form-group">
+		    			<label for="descriptionArea">Description</label>
+		    			<textarea class="form-control" id="descriptionForm" rows="3" data-bind="value:createDescription"></textarea>
+		  			</div>
+	    			<form method="post">
+	      				<div class="form-group">
+	        				<label class="control-label" for="date">Date</label>
+	        				<input class="form-control datepicker" id="date" name="date" placeholder="MM/DD/YYY" data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: createTargetDate"/>
+	      				</div>
+	     			</form>
+		  			<div class="form-group">
+		    			<label for="areaSelect">Product Area</label>
+		    			<select class="form-control" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: 'Select an Area', value:createProductArea"></select>
+		  			</div>
+				</form>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-primary" data-bind="click: testStuff">Add This Feature</button>
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      		</div>
+    	</div>
+  	</div>
 </div>
 
 <!-- 
@@ -246,13 +293,77 @@
 	function FeaturesViewModel() {
         var self = this;
         self.featuresURI = 'http://127.0.0.1:8080/v1/features/';
+        self.clientsURIBase = 'http://127.0.0.1:8080/v1/features/clients/';
         // self.username = "iws";
         // self.password = "pass";
         self.features =  ko.observableArray();
 
-        
+        self.clientRoster = ko.observableArray([]);
+        this.currentClientArray = ko.observableArray([]);
+        this.clientToAdd = ko.observable("");
+        this.selectedClient = ko.observable("");
+        this.selectedClientFilter = ko.observable("")
+       	this.selectedClientFilter.extend({ notify: 'always' });;
+       	this.createTitle = ko.observable("");
+       	this.createDescription = ko.observable("");
+       	this.createTargetDate = ko.observable(moment());
 
-        self.ajax = function(uri, method, data) {
+       	this.createProductArea = ko.observable("");
+       	this.productAreaArray = ko.observableArray(['Policies', 'Billing', 'Claims', 'Reports']);
+        
+        var createFeatureModel = {
+        	selected_client: this.selectedClient(),
+        	added_client: this.clientToAdd(),
+        	title: this.createTitle(),
+        	description: this.createDescription(),
+	       	target_date: this.createTargetDate(),
+	       	product_area: this.createProductArea()
+
+        };
+
+        $(document).ready(function () {   
+		    $('.datepicker').datepicker();
+		}); 
+
+	    this.testStuff = function() {
+	    	// console.log({
+		    // 	client: this.selectedClient() || this.clientToAdd(),
+	     //    	selected_client: this.selectedClient(),
+	     //    	added_client: this.clientToAdd(),
+	     //    	title: this.createTitle(),
+	     //    	description: this.createDescription(),
+		    //    	target_date: this.createTargetDate(),
+		    //    	date: this.createTargetDate().getDate(),
+		    //    	month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
+		    //    	day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
+		    //    	year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
+		    //    	product_area: this.createProductArea()
+      //   	});
+        	// console.log('clientRoster', this.clientRoster(), this.clientRoster().length);
+        	console.log('clientToAdd', this.clientToAdd(), this.clientToAdd().length);
+        	// console.log('selectedClientFilter', this.selectedClientFilter());
+        	console.log(this.clientRoster().length > 1 && ( undefined == this.clientToAdd() || this.clientToAdd().length < 1));
+      //   	console.log(!!(this.clientRoster().length > 1));
+      //   	console.log(!!(undefined == this.clientToAdd()));
+    		// console.log(!!(this.clientToAdd().length < 1));
+        	// this.lowestPriority('TEST ME');
+	    };
+
+	    // this.lowestPriority = function(client) {
+	    // 	var count = 0;
+	    // 	for(var i = 0; i < this.features.length; ++i){
+	    // 		if(this.features[i]['client'] = client) {
+	    // 			count++
+	    // 			}
+	    // 		}
+	    // 	console.log('length');
+	    // 	console.log('')
+	    // 	console.log('number of clients');
+	    // 	console.log(count)
+	    // 	}
+
+
+	    self.ajax = function(uri, method, data) {
             var request = {
                 url: uri,
                 type: method,
@@ -273,88 +384,8 @@
             return $.ajax(request);
         }
 
-        self.clientRoster = ko.observableArray([]);
-        this.clientToAdd = ko.observable("");
-        this.selectedClient = ko.observable("");
-       	
-       	this.createTitle = ko.observable("");
-       	this.createDescription = ko.observable("");
-       	this.createTargetDate = ko.observable(moment());
-
-       	this.createProductArea = ko.observable("");
-       	this.productAreaArray = ko.observableArray(['Policies', 'Billing', 'Claims', 'Reports']);
-
-
-
-        var createFeatureModel = {
-        	selected_client: this.selectedClient(),
-        	added_client: this.clientToAdd(),
-        	title: this.createTitle(),
-        	description: this.createDescription(),
-	       	target_date: this.createTargetDate(),
-	       	product_area: this.createProductArea()
-
-        };
-
-        this.convertDate = function(date) {
-        	return moment(date).format('MM/DD/YYYY');
-        }
-
-        $(document).ready(function () {   
-		    //apply the datepicker to field
-		    $('.datepicker').datepicker();
-		}); 
-
-	    this.testStuff = function() {
-	    	console.log({
-		    	client: this.selectedClient() || this.clientToAdd(),
-	        	selected_client: this.selectedClient(),
-	        	added_client: this.clientToAdd(),
-	        	title: this.createTitle(),
-	        	description: this.createDescription(),
-		       	target_date: this.createTargetDate(),
-		       	date: this.createTargetDate().getDate(),
-		       	month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
-		       	day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
-		       	year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
-		       	product_area: this.createProductArea()
-        	});
-        	lowestPriority('TEST ME');
-	    };
-
-	    this.sendRequest = function() {
-	    	data = {
-		    	title: this.createTitle(),
-		    	description: this.createDescription(),
-		    	client: this.selectedClient() || this.clientToAdd(),
-	        	selected_client: this.selectedClient(),
-	        	added_client: this.clientToAdd(),	        	
-		       	target_date: this.createTargetDate(),
-		       	date: this.createTargetDate().getDate(),
-		       	month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
-		       	day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
-		       	year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
-		       	product_area: this.createProductArea()
-        	};
-        	self.ajax(self.featuresURI, 'POST', data);
-        	console.log('sent request')
-	    }
-
-	    this.lowestPriority = function(client) {
-	    	var count = 0;
-	    	for(var i = 0; i < this.features.length; ++i){
-	    		if(this.features[i]['client'] = client) {
-	    			count++
-	    			}
-	    		}
-	    	console.log('number of clients');
-	    	}
-
-	    }
-
         self.ajax(self.featuresURI, 'GET').done(function(data) {
         	console.log(data);
-        	self.clientList = [];
             for (var i = 0; i < data.length; i++) {
                 self.features.push({
                     id: ko.observable(data[i].id),
@@ -365,16 +396,48 @@
                     target_date: ko.observable(data[i].target_date),
                     product_area: ko.observable(data[i].product_area)
                 });
-                if (!self.clientList.includes(data[i].client)) {
-                	self.clientList.push(data[i].client);
-                	self.clientRoster.push(data[i].client);
-                };
             }          
         });
 
+        self.ajax(self.clientsURIBase, 'GET').done(function(data) {
+        	for (i in data) 
+        		{self.clientRoster.push(data[i])};
+        });
 
-    }
+        this.sendRequest = function() {
+	        self.ajax(self.clientURI, 'GET').done(function(data) {
+	        	console.log(data);
+	        	self.clientList = [];
+	            for (var i = 0; i < data.length; i++) {
+	                self.features.push({
+	                    id: ko.observable(data[i].id),
+	                    title: ko.observable(data[i].title),
+	                    description: ko.observable(data[i].description),
+	                    client: ko.observable(data[i].client),
+	                    client_priority: ko.observable(data[i].client_priority),
+	                    target_date: ko.observable(data[i].target_date),
+	                    product_area: ko.observable(data[i].product_area)
+	                });
+	            }          
+	        })
+	    };
 
+	    this.sendRequest = function() {
+	    	data = {
+		    	title: this.createTitle(),
+		    	description: this.createDescription(),
+		    	client: this.selectedClient() || this.clientToAdd(),	        	
+		       	target_date_month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
+		       	target_date_day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
+		       	target_date_year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
+		       	product_area: this.createProductArea()
+        	};
+        	self.ajax(self.featuresURI, 'POST', data);
+        	console.log('sent request')
+	    };
+
+
+   };
 
 	ko.bindingHandlers.datepicker = {
 	    init: function (element, valueAccessor, allBindingsAccessor) {
@@ -391,6 +454,7 @@
 	}; 
 
     ko.applyBindings(new FeaturesViewModel(), $('#main')[0]);
+
 </script>
 
 {% endblock body %}
