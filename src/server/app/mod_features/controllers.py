@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, make_response, request
 
-from app.mod_features.models import Feature, get_all, get_client_list, add, update, remove, remove_all, get_clients
+from app.mod_features.models import Feature, get_all, get_client_list, add, update, remove, remove_all, get_clients, change_priority
 
 import datetime
 
@@ -23,6 +23,8 @@ def get_feature_of_client(client_name):
     resp = make_response(jsonify(get_clients(client_name)))
     return resp
 
+    # client_name/filter
+
 @mod_features.route('/', methods = ['POST'])
 def create_feature():
 	# if not request.json or not 'title' in request.json:
@@ -40,7 +42,7 @@ def create_feature():
 		)
 	return add(f)
 
-@mod_features.route('/update/<feature_id>', methods = ['POST'])
+@mod_features.route('/<feature_id>', methods = ['PUT'])
 def update_feature(feature_id):
 	content = request.json
 	# content = {
@@ -56,8 +58,14 @@ def update_feature(feature_id):
 	# 	}
 	return update(feature_id, content)
 
+
+@mod_features.route('/clients/<client_name>/priority/', methods = ['PUT'])
+def priority(client_name):
+	return change_priority(client_name, request.json)
+
 @mod_features.route('/<feature_id>', methods = ['DELETE'])
 def remove_feature(feature_id):
+	print "DELETED"
 	return remove(feature_id)
 
 @mod_features.route('/all', methods = ['DELETE'])

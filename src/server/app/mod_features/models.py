@@ -68,6 +68,7 @@ def remove(id):
         db.session.commit()
         db.session.close()
         return 'Removed Feature', 201
+        #TODO: Add in update for priority numbers to shift down.
     except Exception as e:
         print e
         return 'An error was raised while removing.', 500
@@ -84,6 +85,25 @@ def remove_all():
         print e
         return 'An error was raised while removing everything.', 500
 
+def change_priority(client_name, feature_priority): #feature priority =[feature_id1, feature_id2, ... feature_idn]
+    try:
+        features = Feature.query.filter_by(client=client_name)
+        features_unknown_indx = features.count()
+        for feature in features:
+            indx = feature_priority.index(str(feature.id))
+            if indx >= 0:
+                feature.client_priority = indx + 1
+            else:
+                feature.client_priority = features_unknown_indx + 1  # This is a large integer to stick it at the end of the list.
+                features_unknown_indx += 1
+
+
+        db.session.commit()
+        db.session.close()
+        return 'Feature Created', 200
+    except Exception as e:
+        print e
+        return 'An error was raised while changing priority.', 500
 
 # def init_db():
 #     print "init_db"

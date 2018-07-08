@@ -1,32 +1,21 @@
 {% extends 'bootstrap/base.html' %}
-{% block body %}
-{{ super() }}
-<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
-<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script> -->
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{% block head %}
+
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<!-- <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 
 
-<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
-<style>
-/*  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-  #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-  #sortable li span { position: absolute; margin-left: -1.3em; }*/
-</style>
+{% endblock head %}
+
+{% block body %}
+{{ super() }}
+
 
 <div class="container">
     <div class="row" >
@@ -36,7 +25,7 @@
    				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 									<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal"> -->
-						<button class="btn btn-primary" data-bind="click: testStuff()" type="button">Add Feature</button>
+						<button class="btn btn-primary" data-bind="click: updatePriority" type="button">Add Feature</button>
 					</div>
 					<div class="input-group-text">
 						<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1, options: clientRoster, optionsCaption: 'Go to Client', value:selectedClientFilter, valueAllowUnset: true">
@@ -44,25 +33,26 @@
 		   			</div>
 		   		</div>
         	</div>
-			<table class="table table-striped" id="sortable" data-bind="visible: ($data.selectedClientFilter() !== undefined )">
+			<table class="table table-striped" id="features_table_editable">
 			    <thead>
-				    <!-- <tr> -->
-				    	<th style="width: 1px;"><b>Priority</b></th>
+				    <tr>
+				    	<th style="width: 1px;" data-bind="if: selectedClientFilter"><b>Priority</b></th>
 				    	<th><b>Proposed Feature</b></th>
 				    	<th><b>Target Date</b></th>
 				    	<th><b>Client</b></th>
 				    	<th><b>Area</b></th>
-				    	<th><b>Options</b></th>
-				    <!-- </tr> -->
+				    	<th data-bind="if: selectedClientFilter"><b>Options</b></th>
+				    </tr>
 			    </thead>
-			    <tbody>
-				    <!-- ko foreach: features -->
-				    <tr class="ui-state-default">
-				        <td>
+
+
+
+			    <tbody data-bind="foreach: getFilteredFeatures()">
+
+				    <tr class="ui-state-default" data-bind="attr: { id: id }">
+				        <td data-bind="if: editable">
 				        	<div class="btn-group-vertical">
-								<button class="btn btn-primary" type="button"><i class="fas fa-chevron-up"></i></button>
-								<button class="btn btn-primary" data-bind= "text: client_priority" type="button">Add Feature</button>
-								<button class="btn btn-primary" type="button"><i class="fas fa-chevron-down"></i></button>
+								<button class="btn btn-primary" data-bind="text: client_priority" type="button"></button>
 							</div>
 				        </td>
 				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
@@ -75,30 +65,30 @@
 				        <td>
 				        	<p data-bind="text: product_area"></p>
 				        </td>
-				        <td>
+				        <td data-bind="if: editable">
 				        	<div class="btn-group" role="group" aria-label="Basic example">
-				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editFeatureModal">Edit</button>
-				            	<button class="btn btn-danger">Delete</button>
+				        		<!-- <button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {this.delete_me = id()}" data-target="#editFeatureModal">Edit</button> -->
+				        		<button data-bind="click: function () { console.log($parent); }"> Parent Log </button>
+
+				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.testStuff(id())}" data-target="#editFeatureModal">Edit</button>
+				            	<button class="btn btn-danger" data-toggle="modal" data-bind="click: function() {$parent.delete_me = id()}" data-target="#confirm-delete">Delete</button>
 				        	</div>
 				        </td>
 				    </tr>
-				    <!-- /ko -->
 			    </tbody>
 			</table>
-			<table class="table table-striped" data-bind="visible: !($data.selectedClientFilter() !== undefined )">
+			<!--<table class="table table-striped" id="features-table" data-bind="visible: !($data.selectedClientFilter() !== undefined )">
 			    <thead>
-				    <!-- <tr> -->
-				    	
+				    	<tr>
 				    	<th><b>Proposed Feature</b></th>
 				    	<th><b>Target Date</b></th>
 				    	<th><b>Client</b></th>
 				    	<th><b>Area</b></th>
 				    	<th><b>Options</b></th>
-				    <!-- </tr> -->
+				    </tr> 
 			    </thead>
 			    <tbody>
-				    <!-- ko foreach: features -->
-				    <tr class="ui-state-default">
+				    <tr class="ui-state-default" data-bind="id: id">
 				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
 				        <td>
 				        	<p data-bind="text: target_date"></p>
@@ -116,9 +106,8 @@
 				        	</div>
 				        </td>
 				    </tr>
-				    <!-- /ko -->
 			    </tbody>
-			</table>
+			</table>-->
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal">
 				Add Feature
 			</button>
@@ -169,13 +158,28 @@
 				</form>
       		</div>
       		<div class="modal-footer">
-        		<button type="button" class="btn btn-primary" data-bind="click: testStuff">Add This Feature</button>
+        		<button type="button" class="btn btn-primary" data-bind="click: sendRequest">Add This Feature</button>
         		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       		</div>
     	</div>
   	</div>
 </div>
-
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                ...
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button data-bind="click: function() {sendDelete(delete_me)}"class="btn btn-danger btn-ok">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- 
 <div class="modal fade" id="editFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -254,7 +258,26 @@
     </div>
   </div>
 </div> -->
+
+<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+<script type="text/javascript" src="/static/scripts/features_view_model.js"></script>
+
+
 <script>
+	let featuresViewModel = new FeaturesViewModel();
+
 	var fixHelperModified = function(e, tr) {
 	    var $originals = tr.children();
 	    var $helper = tr.clone();
@@ -269,9 +292,9 @@
 	        });
 	    };
 
-	$("#sortable tbody").sortable({
+	$("#features_table_editable tbody").sortable({
 	    helper: fixHelperModified,
-	    stop: updateIndex
+	    stop: featuresViewModel.updatePriority
 	}).disableSelection();
 </script>
 <!-- Calendar Form -->
@@ -290,154 +313,7 @@
 </script>
 
 <script type="text/javascript">
-	function FeaturesViewModel() {
-        var self = this;
-        self.featuresURI = 'http://127.0.0.1:8080/v1/features/';
-        self.clientsURIBase = 'http://127.0.0.1:8080/v1/features/clients/';
-        // self.username = "iws";
-        // self.password = "pass";
-        self.features =  ko.observableArray();
 
-        self.clientRoster = ko.observableArray([]);
-        this.currentClientArray = ko.observableArray([]);
-        this.clientToAdd = ko.observable("");
-        this.selectedClient = ko.observable("");
-        this.selectedClientFilter = ko.observable("")
-       	this.selectedClientFilter.extend({ notify: 'always' });;
-       	this.createTitle = ko.observable("");
-       	this.createDescription = ko.observable("");
-       	this.createTargetDate = ko.observable(moment());
-
-       	this.createProductArea = ko.observable("");
-       	this.productAreaArray = ko.observableArray(['Policies', 'Billing', 'Claims', 'Reports']);
-        
-        var createFeatureModel = {
-        	selected_client: this.selectedClient(),
-        	added_client: this.clientToAdd(),
-        	title: this.createTitle(),
-        	description: this.createDescription(),
-	       	target_date: this.createTargetDate(),
-	       	product_area: this.createProductArea()
-
-        };
-
-        $(document).ready(function () {   
-		    $('.datepicker').datepicker();
-		}); 
-
-	    this.testStuff = function() {
-	    	// console.log({
-		    // 	client: this.selectedClient() || this.clientToAdd(),
-	     //    	selected_client: this.selectedClient(),
-	     //    	added_client: this.clientToAdd(),
-	     //    	title: this.createTitle(),
-	     //    	description: this.createDescription(),
-		    //    	target_date: this.createTargetDate(),
-		    //    	date: this.createTargetDate().getDate(),
-		    //    	month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
-		    //    	day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
-		    //    	year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
-		    //    	product_area: this.createProductArea()
-      //   	});
-        	// console.log('clientRoster', this.clientRoster(), this.clientRoster().length);
-        	console.log('clientToAdd', this.clientToAdd(), this.clientToAdd().length);
-        	// console.log('selectedClientFilter', this.selectedClientFilter());
-        	console.log(this.clientRoster().length > 1 && ( undefined == this.clientToAdd() || this.clientToAdd().length < 1));
-      //   	console.log(!!(this.clientRoster().length > 1));
-      //   	console.log(!!(undefined == this.clientToAdd()));
-    		// console.log(!!(this.clientToAdd().length < 1));
-        	// this.lowestPriority('TEST ME');
-	    };
-
-	    // this.lowestPriority = function(client) {
-	    // 	var count = 0;
-	    // 	for(var i = 0; i < this.features.length; ++i){
-	    // 		if(this.features[i]['client'] = client) {
-	    // 			count++
-	    // 			}
-	    // 		}
-	    // 	console.log('length');
-	    // 	console.log('')
-	    // 	console.log('number of clients');
-	    // 	console.log(count)
-	    // 	}
-
-
-	    self.ajax = function(uri, method, data) {
-            var request = {
-                url: uri,
-                type: method,
-                contentType: "application/json",
-                accepts: "application/json",
-                cache: false,
-                dataType: 'json',
-                data: JSON.stringify(data),
-                header: {'Access-Control-Allow-Origin': "*"},
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization",
-                        "Basic " + btoa(self.username + ":" + self.password));
-                },
-                error: function(jqXHR) {
-                    console.log("ajax error " + jqXHR.status);
-                }
-            };
-            return $.ajax(request);
-        }
-
-        self.ajax(self.featuresURI, 'GET').done(function(data) {
-        	console.log(data);
-            for (var i = 0; i < data.length; i++) {
-                self.features.push({
-                    id: ko.observable(data[i].id),
-                    title: ko.observable(data[i].title),
-                    description: ko.observable(data[i].description),
-                    client: ko.observable(data[i].client),
-                    client_priority: ko.observable(data[i].client_priority),
-                    target_date: ko.observable(data[i].target_date),
-                    product_area: ko.observable(data[i].product_area)
-                });
-            }          
-        });
-
-        self.ajax(self.clientsURIBase, 'GET').done(function(data) {
-        	for (i in data) 
-        		{self.clientRoster.push(data[i])};
-        });
-
-        this.sendRequest = function() {
-	        self.ajax(self.clientURI, 'GET').done(function(data) {
-	        	console.log(data);
-	        	self.clientList = [];
-	            for (var i = 0; i < data.length; i++) {
-	                self.features.push({
-	                    id: ko.observable(data[i].id),
-	                    title: ko.observable(data[i].title),
-	                    description: ko.observable(data[i].description),
-	                    client: ko.observable(data[i].client),
-	                    client_priority: ko.observable(data[i].client_priority),
-	                    target_date: ko.observable(data[i].target_date),
-	                    product_area: ko.observable(data[i].product_area)
-	                });
-	            }          
-	        })
-	    };
-
-	    this.sendRequest = function() {
-	    	data = {
-		    	title: this.createTitle(),
-		    	description: this.createDescription(),
-		    	client: this.selectedClient() || this.clientToAdd(),	        	
-		       	target_date_month: moment(this.createTargetDate(), 'MM/DD/YYYY').format('M'),
-		       	target_date_day: moment(this.createTargetDate(), 'MM/DD/YYYY').format('D'),
-		       	target_date_year: moment(this.createTargetDate(), 'MM/DD/YYYY').format('YYYY'),
-		       	product_area: this.createProductArea()
-        	};
-        	self.ajax(self.featuresURI, 'POST', data);
-        	console.log('sent request')
-	    };
-
-
-   };
 
 	ko.bindingHandlers.datepicker = {
 	    init: function (element, valueAccessor, allBindingsAccessor) {
@@ -453,7 +329,7 @@
 	    }
 	}; 
 
-    ko.applyBindings(new FeaturesViewModel(), $('#main')[0]);
+    ko.applyBindings(featuresViewModel, $('#main')[0]);
 
 </script>
 
