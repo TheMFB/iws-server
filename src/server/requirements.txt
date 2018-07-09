@@ -1,0 +1,10 @@
+flask 
+sqlalchemy 
+sqlalchemy_utils
+flask-sqlalchemy
+flask-migrate
+flask-httpauth
+flask-cors
+flask-restful
+flask-bootstrap
+flask-wtf
