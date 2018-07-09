@@ -1,33 +1,253 @@
-<html>
-    <body>
-    	<h1>Add feature</h1>
-		<form method="POST" action="/">
-			<input type="text" name="title">
-			<input type="submit" value="Add">
-		</form>
+{% extends 'bootstrap/base.html' %}
+{% block head %}
 
-	    <h1>Features</h1>
-	    <table>
-	        {% for feature in features %}
-		        <tr>
-		            <td>
-		            	{{feature.title}}
-		            </td>
-		            <td>
-			            <form method="POST" action="./update" style="display: inline">
-				        	<input type="hidden" value="{{feature.title}}" name="oldtitle">
-				        	<input type="text" value="{{feature.title}}" name="newtitle">
-				        	<input type="submit" value="Update">
-			            </form>
-		            </td>
-		            <td>
-			            <form method="POST" action="./delete" style="display: inline">
-			               <input type="hidden" value="{{feature.title}}" name="title">
-			               <input type="submit" value="Delete">
-			            </form>
-		            </td>
-		        </tr>
-	        {% endfor %}
-	    </table>
-    </body>
-</html>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+{% endblock head %}
+{% block body %}
+{{ super() }}
+
+<div class="container">
+    <div class="row" >
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="page-header">
+            <h1>Proposed Features </h1>
+   				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal">
+							Add Feature
+						</button>
+					</div>
+					<div class="input-group-text">
+						<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1, options: clientRoster, optionsCaption: 'Go to Client', value:selectedClientFilter, valueAllowUnset: true, click: updatePriority">
+				    	</select>
+		   			</div>
+		   		</div>
+        	</div>
+			<table class="table table-striped" id="features_table_editable">
+			    <thead>
+				    <tr>
+				    	<th style="width: 1px;" data-bind="if: selectedClientFilter"><b>Priority</b></th>
+				    	<th><b>Proposed Feature</b></th>
+				    	<th><b>Target Date</b></th>
+				    	<th><b>Client</b></th>
+				    	<th><b>Area</b></th>
+				    	<th data-bind="if: selectedClientFilter"><b>Options</b></th>
+				    </tr>
+			    </thead>
+			    <tbody data-bind="foreach: getFilteredFeatures()">
+				    <tr class="ui-state-default" data-bind="attr: { id: id }">
+				        <td data-bind="if: editable">
+				        	<div class="btn-group-vertical">
+								<button class="btn btn-primary" data-bind="text: client_priority" type="button"></button>
+							</div>
+				        </td>
+				        <td><p><b data-bind="text: title"></b></p><p data-bind="text: description"> </p></td>
+				        <td>
+				        	<p data-bind="text: target_date"></p>
+				        </td>
+				        <td>
+				        	<p data-bind="text: client"></p>
+				        </td>
+				        <td>
+				        	<p data-bind="text: product_area"></p>
+				        </td>
+				        <td data-bind="if: editable">
+				        	<div class="btn-group" role="group" aria-label="Basic example">
+				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.client_id = id(); $parent.updateTitle = title(); $parent.updateDescription = description(); $parent.updateTargetDate = target_date(); $parent.updateProductArea = product_area(); $parent.add_placeholders()}" data-target="#editFeatureModal">Edit</button>
+				            	<button class="btn btn-danger" data-toggle="modal" data-bind="click: function() {$parent.client_id = id()}" data-target="#confirm-delete">Delete</button>
+				        	</div>
+				        </td>
+				    </tr>
+			    </tbody>
+			</table>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal">
+				Add Feature
+			</button>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="addFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ 	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title" id="addFeatureModalLabel">Add a New Feature</h5>
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true">&times;</span>
+        		</button>
+      		</div>
+      		<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="titleInput">Add or Select a Client</label>
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" aria-label="Text input with checkbox" data-bind="enable: undefined == selectedClient() || selectedClient().length < 1, value:clientToAdd, valueUpdate: 'afterkeydown'" placeholder='Add a New Client'>
+							<div class="input-group-prepend">
+				    			<div class="input-group-text">
+									<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1 && (undefined == clientToAdd() || clientToAdd().length < 1), options: clientRoster, optionsCaption: 'Select a Client', value:selectedClient, valueAllowUnset: true">
+						    		</select>
+				   				</div>
+				  			</div>
+						</div>
+					</div>
+		  			<div class="form-group">
+		   				<label for="titleInput">Proposed Feature Title</label>
+		    			<input type="email" class="form-control" id="titleInputForm" placeholder="title" data-bind="value:createTitle">
+		  			</div>
+		  			<div class="form-group">
+		    			<label for="descriptionArea">Description</label>
+		    			<textarea class="form-control" id="descriptionForm" rows="3" data-bind="value:createDescription"></textarea>
+		  			</div>
+	    			<form method="post">
+	      				<div class="form-group">
+	        				<label class="control-label" for="date">Date</label>
+	        				<input class="form-control datepicker" id="date" name="date" placeholder="MM/DD/YYY" data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: createTargetDate"/>
+	      				</div>
+	     			</form>
+		  			<div class="form-group">
+		    			<label for="areaSelect">Product Area</label>
+		    			<select class="form-control" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: 'Select an Area', value:createProductArea"></select>
+		  			</div>
+				</form>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-primary" data-bind="click: sendRequest">Add This Feature</button>
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
+<div class="modal fade" id="editFeatureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ 	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title" id="editFeatureModalLabel">Edit Feature</h5>
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true">&times;</span>
+        		</button>
+      		</div>
+      		<div class="modal-body">
+				<form>
+		  			<div class="form-group">
+		   				<label for="titleInput">Proposed Feature Title</label>
+		    			<input type="email" class="form-control updateTitle" id="editTitleInputForm" data-bind="text: updateTitle">
+		  			</div>
+		  			<div class="form-group">
+		    			<label for="descriptionArea">Description</label>
+		    			<textarea class="form-control updateDescription" id="descriptionForm " rows="3" data-bind="value:updateDescription"></textarea>
+		  			</div>
+	    			<form method="post">
+	      				<div class="form-group">
+	        				<label class="control-label" for="date">Date</label>
+	        				<input class="form-control datepicker updateTargetDate" id="date" name="date"  data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: updateTargetDate"/>
+	      				</div>
+	     			</form>
+		  			<div class="form-group">
+		    			<label for="areaSelect">Product Area</label>
+		    			<select class="form-control updateProductArea" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: updateProductArea, value:updateProductArea"></select>
+		  			</div>
+				</form>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-primary" data-bind="click: sendUpdateRequest">Change this Feature</button>
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Warning!
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this feature?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button data-bind="click: function() {sendDelete(client_id)}"class="btn btn-danger btn-ok">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+<script type="text/javascript" src="/static/scripts/features_view_model.js"></script>
+
+<script>
+	let featuresViewModel = new FeaturesViewModel();
+
+	var fixHelperModified = function(e, tr) {
+	    var $originals = tr.children();
+	    var $helper = tr.clone();
+	    $helper.children().each(function(index) {
+	        $(this).width($originals.eq(index).width())
+	    });
+	    return $helper;
+	},
+	    updateIndex = function(e, ui) {
+	        $('td.index', ui.item.parent()).each(function (i) {
+	            $(this).html(i + 1);
+	        });
+	    };
+
+	$("#features_table_editable tbody").sortable({
+	    helper: fixHelperModified,
+	    stop: featuresViewModel.updatePriority
+	}).disableSelection();
+</script>
+
+<!-- Calendar Form -->
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'mm/dd/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
+</script>
+
+<script type="text/javascript">
+	ko.bindingHandlers.datepicker = {
+	    init: function (element, valueAccessor, allBindingsAccessor) {
+	        var options = allBindingsAccessor().datepickerOptions || {};
+	        $(element).datepicker(options).on("changeDate", function (ev) {
+	            var observable = valueAccessor();
+	            observable(ev.date);
+	        });
+	    },
+	    update: function (element, valueAccessor) {
+	        var value = ko.utils.unwrapObservable(valueAccessor());
+	        $(element).datepicker("setValue", value);
+	    }
+	}; 
+
+    ko.applyBindings(featuresViewModel, $('#main')[0]);
+
+</script>
+
+{% endblock body %}
