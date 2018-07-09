@@ -22,7 +22,6 @@ def get_all_clients():
 def get_feature_of_client(client_name):
     resp = make_response(jsonify(get_clients(client_name)))
     return resp
-
     # change to "clients/client_name/filter"
 
 @mod_features.route('/', methods = ['POST'])

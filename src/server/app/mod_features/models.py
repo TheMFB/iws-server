@@ -58,7 +58,6 @@ def remove(id):
     db.session.close()
     return 'Removed Feature', 201
 
-
 def remove_all():
     features = Feature.query.all()
     for f in features:
@@ -66,7 +65,6 @@ def remove_all():
     db.session.commit()
     db.session.close()
     return 'Removed ALL features', 201
-
 
 def change_priority(client_name, feature_priority): #feature priority =[feature_id1, feature_id2, ... feature_idn]
     features = Feature.query.filter_by(client=client_name)
@@ -84,17 +82,12 @@ def change_priority(client_name, feature_priority): #feature priority =[feature_
     db.session.close()
     return 'Feature Created', 200
 
+# I'll leave this here, just in case...
 # def init_db():
-#     print "init_db"
-#     print "DATETIME STUFF"
-#     print datetime.datetime.now().strftime("%s") + str(uuid.uuid4())
 #     db.create_all()
 
 #     db.session.add(Feature(title="t1", description="d1", client="c1", client_priority="1", target_date=datetime.datetime(2018, 3, 24, 2, 9, 12), product_area="p1"))
 #     db.session.commit()
-#     print Feature.query.all()
 #     db.session.close()
-#     print 'close'
-
 
 # init_db()

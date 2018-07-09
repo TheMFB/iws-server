@@ -7,15 +7,11 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 
-
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
 {% endblock head %}
-
 {% block body %}
 {{ super() }}
-
 
 <div class="container">
     <div class="row" >
@@ -24,8 +20,9 @@
             <h1>Proposed Features </h1>
    				<div class="input-group mb-3">
 					<div class="input-group-prepend">
-									<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal"> -->
-						<button class="btn btn-primary" data-bind="click: updatePriority" type="button">Add Feature</button>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFeatureModal">
+							Add Feature
+						</button>
 					</div>
 					<div class="input-group-text">
 						<select class="form-control" id="clientSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="enable: clientRoster().length > 1, options: clientRoster, optionsCaption: 'Go to Client', value:selectedClientFilter, valueAllowUnset: true, click: updatePriority">
@@ -45,7 +42,6 @@
 				    </tr>
 			    </thead>
 			    <tbody data-bind="foreach: getFilteredFeatures()">
-
 				    <tr class="ui-state-default" data-bind="attr: { id: id }">
 				        <td data-bind="if: editable">
 				        	<div class="btn-group-vertical">
@@ -64,8 +60,7 @@
 				        </td>
 				        <td data-bind="if: editable">
 				        	<div class="btn-group" role="group" aria-label="Basic example">
-				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.client_id = id(), $parent.updateTitle = clone(title())}" data-target="#editFeatureModal">Edit</button>
-				            	<!-- <button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.feature_id_to_update = id(); $parent.updateTitle = title(); $parent.updateDescription = description(); $parent.updateTargetDate = target_date(); $parent.updateProductArea = product_area()}" data-target="#editFeatureModal">Edit</button> -->
+				            	<button type="button" class="btn btn-secondary" data-toggle="modal" data-bind="click: function() {$parent.client_id = id(); $parent.updateTitle = title(); $parent.updateDescription = description(); $parent.updateTargetDate = target_date(); $parent.updateProductArea = product_area(); $parent.add_placeholders()}" data-target="#editFeatureModal">Edit</button>
 				            	<button class="btn btn-danger" data-toggle="modal" data-bind="click: function() {$parent.client_id = id()}" data-target="#confirm-delete">Delete</button>
 				        	</div>
 				        </td>
@@ -139,26 +134,23 @@
       		</div>
       		<div class="modal-body">
 				<form>
-					<button data-bind="click: function () { console.log($data); }"> Current Data Log </button>
-					<button data-bind="click: function () { console.log($parent); }"> Parent Log </button>
-
 		  			<div class="form-group">
 		   				<label for="titleInput">Proposed Feature Title</label>
-		    			<input type="email" class="form-control" id="titleInputForm" data-bind="textInput: updateTitle()">
+		    			<input type="email" class="form-control updateTitle" id="editTitleInputForm" data-bind="text: updateTitle">
 		  			</div>
 		  			<div class="form-group">
 		    			<label for="descriptionArea">Description</label>
-		    			<textarea class="form-control" id="descriptionForm" rows="3" data-bind="value:updateDescription"></textarea>
+		    			<textarea class="form-control updateDescription" id="descriptionForm " rows="3" data-bind="value:updateDescription"></textarea>
 		  			</div>
 	    			<form method="post">
 	      				<div class="form-group">
 	        				<label class="control-label" for="date">Date</label>
-	        				<input class="form-control datepicker" id="date" name="date" placeholder="MM/DD/YYY" data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: updateTargetDate"/>
+	        				<input class="form-control datepicker updateTargetDate" id="date" name="date"  data-date-format="mm/dd/yyyy" type="text" data-bind="datepicker: updateTargetDate"/>
 	      				</div>
 	     			</form>
 		  			<div class="form-group">
 		    			<label for="areaSelect">Product Area</label>
-		    			<select class="form-control" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: 'Select an Area', value:updateProductArea"></select>
+		    			<select class="form-control updateProductArea" id="areaSelectForm" aria-label="" aria-describedby="basic-addon1" data-bind="options: productAreaArray, optionsCaption: updateProductArea, value:updateProductArea"></select>
 		  			</div>
 				</form>
       		</div>
@@ -186,7 +178,6 @@
     </div>
 </div>
 
-
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -201,7 +192,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
 <script type="text/javascript" src="/static/scripts/features_view_model.js"></script>
-
 
 <script>
 	let featuresViewModel = new FeaturesViewModel();
@@ -225,6 +215,7 @@
 	    stop: featuresViewModel.updatePriority
 	}).disableSelection();
 </script>
+
 <!-- Calendar Form -->
 <script>
     $(document).ready(function(){
@@ -241,8 +232,6 @@
 </script>
 
 <script type="text/javascript">
-
-
 	ko.bindingHandlers.datepicker = {
 	    init: function (element, valueAccessor, allBindingsAccessor) {
 	        var options = allBindingsAccessor().datepickerOptions || {};
