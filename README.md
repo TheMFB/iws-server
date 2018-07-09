@@ -10,9 +10,7 @@ This site provides an app to keep track of "feature requests", which are request
 * Product Area: A selection list of product areas (use 'Policies', 'Billing', 'Claims', 'Reports')
 
 
-# TODO: Add a detailed description on how to get this up and running!!
-
-Hello!
+# Hello!
 
 In order to get this up and runnin' locally, please make sure that you have the following installed:
 
