@@ -1,7 +1,7 @@
 function FeaturesViewModel() {
     var self = this;
-    self.featuresURI = 'http://127.0.0.1:8080/v1/features/';
-    self.clientsURIBase = 'http://127.0.0.1:8080/v1/features/clients/';
+    self.featuresURI = 'http://iws-server-dev.us-west-2.elasticbeanstalk.com/v1/features/';
+    self.clientsURIBase = 'http://iws-server-dev.us-west-2.elasticbeanstalk.com/v1/features/clients/';
     self.username = "iws";
     self.password = "pass";
     self.features =  ko.observableArray();

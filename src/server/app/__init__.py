@@ -5,6 +5,7 @@ from flask_httpauth import HTTPBasicAuth
 from flask_cors import CORS
 
 app = Flask(__name__)
+application = app
 app.config.from_object('config.base')
 
 CORS(app)
